@@ -12,17 +12,15 @@ export function generateStaticParams() {
   return getAllSpeciesSlugs();
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const species = await getSpeciesBySlug(slug);
   if (!species) return {};
   return {
     title: `${species.commonName} · Herbarium`,
-    description: species.profile?.summary?.slice(0, 160) ?? `Ficha de ${species.scientificName} en el Atlas de Biodiversidad de Nariño.`,
+    description:
+      species.profile?.summary?.slice(0, 160) ??
+      `Ficha de ${species.scientificName} en el Atlas de Biodiversidad de Nariño.`,
   };
 }
 
@@ -40,10 +38,7 @@ export default async function SpeciesPage({ params }: PageProps) {
   return (
     <>
       <Header />
-      <main
-        id="main-content"
-        style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem" }}
-      >
+      <main id="main-content" style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem" }}>
         <nav
           aria-label="Breadcrumb"
           style={{
@@ -53,9 +48,13 @@ export default async function SpeciesPage({ params }: PageProps) {
             color: "var(--color-ink-muted)",
           }}
         >
-          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>Inicio</Link>
+          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>
+            Inicio
+          </Link>
           {" / "}
-          <Link href="/herbarium" style={{ color: "inherit", textDecoration: "none" }}>Herbarium</Link>
+          <Link href="/herbarium" style={{ color: "inherit", textDecoration: "none" }}>
+            Herbarium
+          </Link>
           {" / "}
           <span>{species.commonName}</span>
         </nav>

@@ -2,12 +2,7 @@ import "server-only";
 import { cache } from "react";
 import type { Species } from "@/domain/models";
 import { unwrapOr } from "@/domain/result";
-import {
-  CURATED_SPECIES,
-  catalogNumberOf,
-  findCuratedSpecies,
-  type CuratedSpecies,
-} from "@/config/species";
+import { CURATED_SPECIES, catalogNumberOf, findCuratedSpecies, type CuratedSpecies } from "@/config/species";
 import { createProfileProvider, createTaxonomyProvider } from "@/adapters/provider.factory";
 
 const taxonomy = createTaxonomyProvider();

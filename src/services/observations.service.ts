@@ -3,7 +3,7 @@ import type { DomainError } from "@/domain/errors";
 import { domainError } from "@/domain/errors";
 import type { Observation } from "@/domain/models";
 import { err, type Result } from "@/domain/result";
-import { findMunicipality } from "@/config/municipalities";
+import { findMunicipality, NARINO_INAT_PLACE_ID } from "@/config/municipalities";
 import { createObservationProvider } from "@/adapters/provider.factory";
 
 const observations = createObservationProvider();
@@ -24,6 +24,7 @@ export async function getRecentByMunicipality(
   return observations.getObservations({
     center: muni.center,
     radiusKm: muni.radiusKm,
+    placeId: NARINO_INAT_PLACE_ID,
     limit,
     locale: LOCALE,
   });

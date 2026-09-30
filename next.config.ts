@@ -17,6 +17,8 @@ const contentSecurityPolicy = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // A stray lockfile higher up the disk must not be taken as the workspace root.
+  turbopack: { root: process.cwd() },
   images: {
     remotePatterns: [
       new URL("https://inaturalist-open-data.s3.amazonaws.com/photos/**"),

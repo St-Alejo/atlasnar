@@ -5,13 +5,7 @@ import { useEffect } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 
-export default function Error({
-  error,
-  retry,
-}: {
-  error: Error & { digest?: string };
-  retry: () => void;
-}) {
+export default function Error({ error, retry }: { error: Error & { digest?: string }; retry: () => void }) {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -23,7 +17,13 @@ export default function Error({
         id="main-content"
         style={{ maxWidth: "640px", margin: "0 auto", padding: "4rem 1.5rem", textAlign: "center" }}
       >
-        <p style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "0.75rem", color: "var(--color-cinnabar)" }}>
+        <p
+          style={{
+            fontFamily: "var(--font-mono, monospace)",
+            fontSize: "0.75rem",
+            color: "var(--color-cinnabar)",
+          }}
+        >
           Entrada del cuaderno ilegible
         </p>
         <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 2.6rem)", margin: "0.5rem 0 1rem" }}>
@@ -33,7 +33,13 @@ export default function Error({
           Una de las fuentes de datos no respondió como esperábamos. Suele ser temporal.
         </p>
         {error.digest && (
-          <p style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "0.7rem", color: "var(--color-ink-muted)" }}>
+          <p
+            style={{
+              fontFamily: "var(--font-mono, monospace)",
+              fontSize: "0.7rem",
+              color: "var(--color-ink-muted)",
+            }}
+          >
             Referencia: {error.digest}
           </p>
         )}

@@ -29,6 +29,7 @@ export function buildObservationsUrl(query: ObservationQuery): string {
     photo_license: OPEN_LICENSES,
     geoprivacy: "open",
   });
+  if (query.placeId !== undefined) params.set("place_id", String(query.placeId));
   if (query.taxonName) params.set("taxon_name", query.taxonName);
   if (query.group) params.set("iconic_taxa", query.group);
   if (query.from) params.set("d1", query.from);

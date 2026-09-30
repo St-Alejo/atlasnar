@@ -59,7 +59,16 @@ function ObservationCard({ observation, index }: ObservationCardProps) {
             {observation.species.commonName}
           </p>
         )}
-        <dl style={{ margin: 0, fontSize: "0.75rem", color: "var(--color-ink-muted)", display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+        <dl
+          style={{
+            margin: 0,
+            fontSize: "0.75rem",
+            color: "var(--color-ink-muted)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.15rem",
+          }}
+        >
           {observation.observedAt && (
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <dt>📅</dt>
@@ -122,7 +131,9 @@ export function ObservationList({
 }: ObservationListProps) {
   if (observations.length === 0) {
     return (
-      <p style={{ color: "var(--color-ink-muted)", fontStyle: "italic", textAlign: "center", padding: "2rem" }}>
+      <p
+        style={{ color: "var(--color-ink-muted)", fontStyle: "italic", textAlign: "center", padding: "2rem" }}
+      >
         {emptyMessage}
       </p>
     );

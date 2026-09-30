@@ -35,11 +35,13 @@ export const iNatObservationSchema = z.object({
   place_guess: z.string().nullish(),
   uri: z.string().nullish(),
   user: z.object({ login: z.string().nullish(), name: z.string().nullish() }).nullish(),
-  taxon: iNatTaxonSummarySchema.pick({
-    name: true,
-    preferred_common_name: true,
-    iconic_taxon_name: true,
-  }).nullish(),
+  taxon: iNatTaxonSummarySchema
+    .pick({
+      name: true,
+      preferred_common_name: true,
+      iconic_taxon_name: true,
+    })
+    .nullish(),
   photos: z.array(iNatPhotoSchema).nullish(),
 });
 

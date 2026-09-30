@@ -46,9 +46,7 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
       >
         {/* Photo */}
         {coverPhoto && (
-          <figure
-            style={{ margin: 0, position: "relative", aspectRatio: "16/7", overflow: "hidden" }}
-          >
+          <figure style={{ margin: 0, position: "relative", aspectRatio: "16/7", overflow: "hidden" }}>
             <Image
               src={coverPhoto.url}
               alt={`Fotografía de ${species.scientificName}`}
@@ -80,7 +78,14 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
 
         <div style={{ padding: "2rem" }}>
           {/* Header */}
-          <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" }}>
+          <header
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginBottom: "1.5rem",
+            }}
+          >
             <div>
               <p
                 style={{
@@ -92,7 +97,8 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
                   margin: "0 0 0.25rem",
                 }}
               >
-                {formatCatalogNumber(species.catalogNumber)} · {EMBLEM_ICON[species.emblem]} {FLOOR_LABEL[species.thermalFloor]}
+                {formatCatalogNumber(species.catalogNumber)} · {EMBLEM_ICON[species.emblem]}{" "}
+                {FLOOR_LABEL[species.thermalFloor]}
               </p>
               <h1
                 style={{
@@ -121,9 +127,7 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
           {/* Summary */}
           {species.profile?.summary && (
             <section style={{ marginBottom: "1.5rem" }}>
-              <p style={{ lineHeight: 1.7, fontSize: "0.95rem" }}>
-                {species.profile.summary}
-              </p>
+              <p style={{ lineHeight: 1.7, fontSize: "0.95rem" }}>{species.profile.summary}</p>
             </section>
           )}
 
@@ -158,7 +162,13 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
                 ].map(([label, value]) =>
                   value ? (
                     <Fragment key={label}>
-                      <dt style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono, monospace)", fontSize: "0.75rem" }}>
+                      <dt
+                        style={{
+                          color: "var(--color-ink-muted)",
+                          fontFamily: "var(--font-mono, monospace)",
+                          fontSize: "0.75rem",
+                        }}
+                      >
                         {label}
                       </dt>
                       <dd style={{ margin: 0, fontStyle: label === "Familia" ? "italic" : "normal" }}>

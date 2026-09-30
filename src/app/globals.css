@@ -4,38 +4,38 @@
 /* Raw values live on :root so dark mode can redefine them in one place.   */
 :root {
   /* Colour palette (every text/background pair checked for WCAG AA) */
-  --color-paper:       #F1EAD8;
-  --color-paper-deep:  #E6DCC3;
-  --color-paper-light: #FAF6EE;
-  --color-ink:         #1B2A22;
-  --color-ink-muted:   #3D4F45;
-  --color-moss:        #3E5C3A;
-  --color-moss-light:  #5A7D55;
-  --color-cinnabar:    #A93A24;
-  --color-ochre:       #D9A441;
-  --color-ochre-light: #F0C060;
-  --color-slate:       #2E3A3F;
-  --color-slate-deep:  #1C262A;
-  --color-sky:         #6B9BA8;
+  --color-paper: #f1ead8;
+  --color-paper-deep: #e6dcc3;
+  --color-paper-light: #faf6ee;
+  --color-ink: #1b2a22;
+  --color-ink-muted: #3d4f45;
+  --color-moss: #3e5c3a;
+  --color-moss-light: #5a7d55;
+  --color-cinnabar: #a93a24;
+  --color-ochre: #d9a441;
+  --color-ochre-light: #f0c060;
+  --color-slate: #2e3a3f;
+  --color-slate-deep: #1c262a;
+  --color-sky: #6b9ba8;
 
   /* Semantic aliases */
-  --color-background:  var(--color-paper);
-  --color-foreground:  var(--color-ink);
-  --color-surface:     var(--color-paper-deep);
-  --color-accent:      var(--color-moss);
-  --color-danger:      var(--color-cinnabar);
-  --color-highlight:   var(--color-ochre);
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-surface: var(--color-paper-deep);
+  --color-accent: var(--color-moss);
+  --color-danger: var(--color-cinnabar);
+  --color-highlight: var(--color-ochre);
 
   /* Chrome (header, footer, heroes): identical in light and dark mode */
-  --color-chrome:        #1B2A22;
-  --color-chrome-text:   #F1EAD8;
-  --color-chrome-accent: #D9A441;
+  --color-chrome: #1b2a22;
+  --color-chrome-text: #f1ead8;
+  --color-chrome-accent: #d9a441;
 
   /* Radii */
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  16px;
-  --radius-xl:  24px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
 
   color-scheme: light;
@@ -45,16 +45,16 @@
 /* Paper turns into volcanic slate and the ink becomes light.              */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-paper:       #1C262A;
-    --color-paper-deep:  #2E3A3F;
+    --color-paper: #1c262a;
+    --color-paper-deep: #2e3a3f;
     --color-paper-light: #243034;
-    --color-ink:         #F1EAD8;
-    --color-ink-muted:   #C9C0AA;
-    --color-moss:        #9DBF8E;
-    --color-moss-light:  #B7D4A8;
-    --color-cinnabar:    #F08A6E;
-    --color-ochre:       #E8B95A;
-    --color-sky:         #8FBBC7;
+    --color-ink: #f1ead8;
+    --color-ink-muted: #c9c0aa;
+    --color-moss: #9dbf8e;
+    --color-moss-light: #b7d4a8;
+    --color-cinnabar: #f08a6e;
+    --color-ochre: #e8b95a;
+    --color-sky: #8fbbc7;
     color-scheme: dark;
   }
 }
@@ -62,12 +62,16 @@
 /* Font families come from next/font variables set on <html>. */
 @theme inline {
   --font-display: var(--font-fraunces);
-  --font-sans:    var(--font-instrument);
-  --font-mono:    var(--font-ibmplex);
+  --font-sans: var(--font-instrument);
+  --font-mono: var(--font-ibmplex);
 }
 
 /* ── Base reset & typography ──────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 html {
   scroll-behavior: smooth;
@@ -76,35 +80,40 @@ html {
 
 body {
   background-color: var(--color-background);
-  color:            var(--color-foreground);
-  font-family:      var(--font-sans, ui-sans-serif, system-ui, sans-serif);
-  font-size:        1rem;
-  line-height:      1.65;
-  min-height:       100dvh;
-  display:          flex;
-  flex-direction:   column;
+  color: var(--color-foreground);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.65;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Skip link ────────────────────────────────────────────────────────── */
 .skip-link {
-  position:  absolute;
-  top:       -100%;
-  left:      1rem;
-  padding:   0.5rem 1rem;
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.5rem 1rem;
   background: var(--color-moss);
-  color:     var(--color-paper);
+  color: var(--color-paper);
   border-radius: var(--radius-md);
   font-weight: 600;
-  z-index:   9999;
+  z-index: 9999;
   transition: top 0.2s;
 }
-.skip-link:focus { top: 1rem; }
+.skip-link:focus {
+  top: 1rem;
+}
 
 /* ── Headings ─────────────────────────────────────────────────────────── */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-display, Georgia, serif);
   line-height: 1.15;
-  text-wrap:   balance;
+  text-wrap: balance;
 }
 
 /* ── Focus visible ────────────────────────────────────────────────────── */
@@ -115,32 +124,54 @@ h1, h2, h3, h4 {
 
 /* ── Texture overlay (SVG grain, no external image) ──────────────────── */
 body::before {
-  content:  "";
+  content: "";
   position: fixed;
-  inset:    0;
-  z-index:  0;
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-repeat: repeat;
 }
 
 /* Ensure content sits above pseudo-element */
-body > * { position: relative; z-index: 1; }
+body > * {
+  position: relative;
+  z-index: 1;
+}
 
 /* ── Utility classes ──────────────────────────────────────────────────── */
-.font-display  { font-family: var(--font-display, Georgia, serif); }
-.font-mono     { font-family: var(--font-mono, monospace); }
-.text-muted    { color: var(--color-ink-muted); }
+.font-display {
+  font-family: var(--font-display, Georgia, serif);
+}
+.font-mono {
+  font-family: var(--font-mono, monospace);
+}
+.text-muted {
+  color: var(--color-ink-muted);
+}
 
 /* ── Animations ───────────────────────────────────────────────────────── */
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(6px); filter: blur(4px); }
-  to   { opacity: 1; transform: translateY(0);   filter: blur(0);   }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 @keyframes pulse-gentle {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .animate-reveal {
@@ -157,11 +188,15 @@ body > * { position: relative; z-index: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration:   0.01ms !important;
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration:  0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
   ::view-transition-group(*),
   ::view-transition-old(*),

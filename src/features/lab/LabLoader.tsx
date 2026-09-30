@@ -4,7 +4,11 @@ import dynamic from "next/dynamic";
 
 export function LabSkeleton() {
   return (
-    <div data-testid="lab-skeleton" aria-busy="true" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <div
+      data-testid="lab-skeleton"
+      aria-busy="true"
+      style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+    >
       <div style={{ height: 86, borderRadius: "var(--radius-lg)", background: "var(--color-paper-deep)" }} />
       <div
         style={{

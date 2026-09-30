@@ -12,7 +12,8 @@ export function stripHtml(html: string): string {
   return html
     .replace(/<[^>]*>/g, "")
     .replace(/&(#\d+|#x[\da-f]+|\w+);/gi, (entity: string, code: string) => {
-      if (code.startsWith("#x") || code.startsWith("#X")) return String.fromCodePoint(parseInt(code.slice(2), 16));
+      if (code.startsWith("#x") || code.startsWith("#X"))
+        return String.fromCodePoint(parseInt(code.slice(2), 16));
       if (code.startsWith("#")) return String.fromCodePoint(parseInt(code.slice(1), 10));
       return NAMED_ENTITIES[code.toLowerCase()] ?? entity;
     })

@@ -1,14 +1,19 @@
-import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [tsconfigPaths()],
+  resolve: { tsconfigPaths: true },
   test: {
     environment: "node",
     include: ["tests/unit/**/*.test.ts"],
     coverage: {
       provider: "v8",
-      include: ["src/domain/**", "src/infrastructure/**", "src/adapters/**", "src/lib/**", "src/features/lab/*.ts"],
+      include: [
+        "src/domain/**",
+        "src/infrastructure/**",
+        "src/adapters/**",
+        "src/lib/**",
+        "src/features/lab/*.ts",
+      ],
     },
   },
 });

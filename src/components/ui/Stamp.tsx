@@ -6,11 +6,11 @@ interface StampProps {
 }
 
 const STAMP_COLORS: Record<RenderPattern, { bg: string; text: string; border: string }> = {
-  SSG:       { bg: "#3E5C3A", text: "#F1EAD8", border: "#2A3F27" },
-  ISR:       { bg: "#D9A441", text: "#1B2A22", border: "#B0832A" },
-  SSR:       { bg: "#2E3A3F", text: "#F1EAD8", border: "#1C262A" },
-  STREAMING: { bg: "#C2452D", text: "#F1EAD8", border: "#8E3020" },
-  CSR:       { bg: "#6B9BA8", text: "#1B2A22", border: "#4A7685" },
+  SSG: { bg: "#3E5C3A", text: "#F1EAD8", border: "#2A3F27" },
+  ISR: { bg: "#D9A441", text: "#1B2A22", border: "#B0832A" },
+  SSR: { bg: "#2E3A3F", text: "#F1EAD8", border: "#1C262A" },
+  STREAMING: { bg: "#A93A24", text: "#F1EAD8", border: "#7A2A1A" },
+  CSR: { bg: "#6B9BA8", text: "#1B2A22", border: "#4A7685" },
 };
 
 const SIZES = {

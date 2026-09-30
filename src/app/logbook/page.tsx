@@ -49,7 +49,13 @@ export default function LogbookIndexPage() {
                   color: "inherit",
                 }}
               >
-                <span style={{ fontFamily: "var(--font-display, Georgia, serif)", fontSize: "1.2rem", fontWeight: 700 }}>
+                <span
+                  style={{
+                    fontFamily: "var(--font-display, Georgia, serif)",
+                    fontSize: "1.2rem",
+                    fontWeight: 700,
+                  }}
+                >
                   {m.name}
                 </span>
                 <span

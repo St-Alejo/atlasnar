@@ -1,54 +1,53 @@
 {
-    "name":  "andean-field-atlas",
-    "version":  "0.1.0",
-    "private":  true,
-    "scripts":  {
-                    "dev":  "next dev",
-                    "build":  "next build",
-                    "start":  "next start",
-                    "lint":  "eslint",
-                    "format":  "prettier --write .",
-                    "format:check":  "prettier --check .",
-                    "typecheck":  "next typegen \u0026\u0026 tsc --noEmit",
-                    "test":  "vitest run",
-                    "test:watch":  "vitest",
-                    "test:e2e":  "playwright test",
-                    "prepare":  "husky"
-                },
-    "dependencies":  {
-                         "leaflet":  "^1.9.4",
-                         "next":  "16.3.7",
-                         "react":  "19.2.8",
-                         "react-dom":  "19.2.8",
-                         "react-leaflet":  "^5.0.0",
-                         "server-only":  "^0.0.1",
-                         "zod":  "^4.6.5"
-                     },
-    "devDependencies":  {
-                            "@playwright/test":  "^1.63.0",
-                            "@tailwindcss/postcss":  "^4",
-                            "@types/leaflet":  "^1.9.22",
-                            "@types/node":  "^22.20.4",
-                            "@types/react":  "^19",
-                            "@types/react-dom":  "^19",
-                            "@vitest/coverage-v8":  "^5.0.2",
-                            "eslint":  "^9",
-                            "eslint-config-next":  "16.3.7",
-                            "husky":  "^9.1.7",
-                            "lint-staged":  "^16.4.0",
-                            "prettier":  "^3.9.9",
-                            "tailwindcss":  "^4",
-                            "typescript":  "^5",
-                            "vite-tsconfig-paths":  "^6.1.1",
-                            "vitest":  "^5.0.2"
-                        },
-    "lint-staged":  {
-                        "*.{ts,tsx,mjs}":  [
-                                               "eslint --fix",
-                                               "prettier --write"
-                                           ],
-                        "*.{json,css,md,yml}":  [
-                                                    "prettier --write"
-                                                ]
-                    }
+  "name": "andean-field-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "next": "16.3.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-leaflet": "^5.0.0",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^22.20.4",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^5.0.2",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.7",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.9",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^5.0.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md,yml}": [
+      "prettier --write"
+    ]
+  }
 }

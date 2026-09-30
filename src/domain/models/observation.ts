@@ -1,14 +1,7 @@
 import type { GeoPoint } from "./geo";
 import type { Photo } from "./photo";
 
-export type IconicGroup =
-  | "Aves"
-  | "Mammalia"
-  | "Plantae"
-  | "Insecta"
-  | "Amphibia"
-  | "Reptilia"
-  | "Fungi";
+export type IconicGroup = "Aves" | "Mammalia" | "Plantae" | "Insecta" | "Amphibia" | "Reptilia" | "Fungi";
 
 export interface Observation {
   readonly id: string;
@@ -28,6 +21,8 @@ export interface Observation {
 export interface ObservationQuery {
   readonly center: GeoPoint;
   readonly radiusKm: number;
+  /** Optional administrative boundary (intersected with the circle). */
+  readonly placeId?: number;
   readonly taxonName?: string;
   readonly group?: IconicGroup;
   /** ISO date (YYYY-MM-DD): only observations on or after this day. */

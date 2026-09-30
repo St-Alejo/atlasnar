@@ -44,7 +44,7 @@ const STATIONS = [
     detail: "Dinámica · por petición",
   },
   {
-    href: "/dossier/andean-condor",
+    href: "/dossier/andean-cock-of-the-rock",
     emoji: "🗂️",
     name: "Specimen Dossier",
     pattern: "STREAMING" as const,
@@ -64,10 +64,38 @@ const STATIONS = [
 ] as const;
 
 const COMPARISON_ROWS = [
-  { label: "TTFB", ssg: "< 50 ms", isr: "< 50 ms", ssr: "200-800 ms", streaming: "< 100 ms", csr: "< 100 ms" },
-  { label: "FCP", ssg: "Muy rápido", isr: "Muy rápido", ssr: "Más lento", streaming: "Rápido", csr: "Más lento" },
-  { label: "SEO", ssg: "✅ Óptimo", isr: "✅ Óptimo", ssr: "✅ Óptimo", streaming: "✅ Parcial", csr: "⚠️ Limitado" },
-  { label: "Datos frescos", ssg: "Al build", isr: "Cada 60 s", ssr: "En c/petición", streaming: "En c/petición", csr: "En c/petición" },
+  {
+    label: "TTFB",
+    ssg: "< 50 ms",
+    isr: "< 50 ms",
+    ssr: "200-800 ms",
+    streaming: "< 100 ms",
+    csr: "< 100 ms",
+  },
+  {
+    label: "FCP",
+    ssg: "Muy rápido",
+    isr: "Muy rápido",
+    ssr: "Más lento",
+    streaming: "Rápido",
+    csr: "Más lento",
+  },
+  {
+    label: "SEO",
+    ssg: "✅ Óptimo",
+    isr: "✅ Óptimo",
+    ssr: "✅ Óptimo",
+    streaming: "✅ Parcial",
+    csr: "⚠️ Limitado",
+  },
+  {
+    label: "Datos frescos",
+    ssg: "Al build",
+    isr: "Cada 60 s",
+    ssr: "En c/petición",
+    streaming: "En c/petición",
+    csr: "En c/petición",
+  },
   { label: "Coste servidor", ssg: "0", isr: "Mínimo", ssr: "Alto", streaming: "Alto", csr: "0" },
   { label: "JS requerido", ssg: "No", isr: "No", ssr: "No", streaming: "No", csr: "Sí" },
 ] as const;
@@ -147,8 +175,8 @@ export default function HomePage() {
                 margin: "0 auto 2rem",
               }}
             >
-              Cuaderno de campo digital sobre la biodiversidad de Nariño, Colombia.
-              Cada estación demuestra un patrón de rendering distinto: <strong>SSG, ISR, SSR, Streaming SSR y CSR</strong>.
+              Cuaderno de campo digital sobre la biodiversidad de Nariño, Colombia. Cada estación demuestra un
+              patrón de rendering distinto: <strong>SSG, ISR, SSR, Streaming SSR y CSR</strong>.
             </p>
             <p
               style={{
@@ -182,8 +210,8 @@ export default function HomePage() {
             Las cinco estaciones
           </h2>
           <p style={{ color: "var(--color-ink-muted)", marginBottom: "2rem", maxWidth: "60ch" }}>
-            Cada estación usa el patrón de rendering más adecuado para sus datos.
-            La app se explica a sí misma: cada página muestra qué patrón usa y por qué.
+            Cada estación usa el patrón de rendering más adecuado para sus datos. La app se explica a sí
+            misma: cada página muestra qué patrón usa y por qué.
           </p>
 
           <div
@@ -241,7 +269,14 @@ export default function HomePage() {
                     >
                       {station.detail}
                     </p>
-                    <p style={{ fontSize: "0.85rem", lineHeight: 1.6, color: "var(--color-ink-muted)", margin: 0 }}>
+                    <p
+                      style={{
+                        fontSize: "0.85rem",
+                        lineHeight: 1.6,
+                        color: "var(--color-ink-muted)",
+                        margin: 0,
+                      }}
+                    >
                       {station.description}
                     </p>
                   </div>
@@ -258,7 +293,11 @@ export default function HomePage() {
         >
           <h2
             id="floors-title"
-            style={{ fontFamily: "var(--font-display, Georgia, serif)", fontSize: "1.6rem", marginBottom: "1.5rem" }}
+            style={{
+              fontFamily: "var(--font-display, Georgia, serif)",
+              fontSize: "1.6rem",
+              marginBottom: "1.5rem",
+            }}
           >
             Pisos térmicos de Nariño
           </h2>
@@ -283,7 +322,13 @@ export default function HomePage() {
                 >
                   {floor.range}
                 </p>
-                <h3 style={{ fontFamily: "var(--font-display, Georgia, serif)", fontSize: "1.25rem", margin: "0.2rem 0" }}>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display, Georgia, serif)",
+                    fontSize: "1.25rem",
+                    margin: "0.2rem 0",
+                  }}
+                >
                   {floor.name}
                 </h3>
                 <p style={{ margin: 0, color: "var(--color-ink-muted)", fontSize: "0.9rem" }}>{floor.text}</p>
@@ -312,7 +357,8 @@ export default function HomePage() {
               Comparativa de patrones
             </h2>
             <p style={{ color: "var(--color-ink-muted)", marginBottom: "1.5rem", maxWidth: "55ch" }}>
-              Ningún patrón es mejor que otro en absoluto. La clave es elegir el adecuado para cada tipo de contenido.
+              Ningún patrón es mejor que otro en absoluto. La clave es elegir el adecuado para cada tipo de
+              contenido.
             </p>
             <div style={{ overflowX: "auto" }}>
               <table
@@ -324,7 +370,18 @@ export default function HomePage() {
               >
                 <thead>
                   <tr>
-                    <th style={{ textAlign: "left", padding: "0.6rem 1rem", color: "var(--color-ink-muted)", fontFamily: "var(--font-mono, monospace)", fontSize: "0.65rem", letterSpacing: "0.08em", textTransform: "uppercase", borderBottom: "2px solid var(--color-paper)" }}>
+                    <th
+                      style={{
+                        textAlign: "left",
+                        padding: "0.6rem 1rem",
+                        color: "var(--color-ink-muted)",
+                        fontFamily: "var(--font-mono, monospace)",
+                        fontSize: "0.65rem",
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        borderBottom: "2px solid var(--color-paper)",
+                      }}
+                    >
                       Métrica
                     </th>
                     {["SSG", "ISR", "SSR", "Streaming", "CSR"].map((p) => (
@@ -349,7 +406,10 @@ export default function HomePage() {
                     <tr
                       key={row.label}
                       style={{
-                        background: i % 2 === 0 ? "transparent" : "color-mix(in srgb, var(--color-paper) 40%, transparent)",
+                        background:
+                          i % 2 === 0
+                            ? "transparent"
+                            : "color-mix(in srgb, var(--color-paper) 40%, transparent)",
                       }}
                     >
                       <td

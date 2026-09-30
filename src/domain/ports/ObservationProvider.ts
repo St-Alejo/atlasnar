@@ -4,10 +4,7 @@ import type { Result } from "../result";
 
 /** Citizen-science observations and taxon profiles (implemented by iNaturalist). */
 export interface ObservationProvider {
-  getObservations(
-    query: ObservationQuery,
-    signal?: AbortSignal,
-  ): Promise<Result<Observation[], DomainError>>;
+  getObservations(query: ObservationQuery, signal?: AbortSignal): Promise<Result<Observation[], DomainError>>;
   getTaxonProfile(
     scientificName: string,
     locale: string,

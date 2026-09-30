@@ -20,14 +20,19 @@ export default function LabPage() {
       <main id="main-content">
         <StationHero tone="slate" eyebrow="🔬 Estación · CSR" title="Field Lab">
           <p style={{ opacity: 0.9, maxWidth: "60ch", lineHeight: 1.6 }}>
-            Instrumentos en tu mano: el servidor entrega un marco vacío y el navegador consulta
-            iNaturalist directamente. Abre la pestaña <strong>Network</strong> de DevTools para ver
-            cada petición.
+            Instrumentos en tu mano: el servidor entrega un marco vacío y el navegador consulta iNaturalist
+            directamente. Abre la pestaña <strong>Network</strong> de DevTools para ver cada petición.
           </p>
         </StationHero>
 
         <div
-          style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1.5rem", display: "grid", gap: "2rem" }}
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: "2rem 1.5rem",
+            display: "grid",
+            gap: "2rem",
+          }}
         >
           <noscript>
             <p
@@ -46,11 +51,7 @@ export default function LabPage() {
           <LabLoader />
 
           <div style={{ maxWidth: 420 }}>
-            <RenderTelemetry
-              pattern="CSR"
-              generatedAt={generatedAt}
-              generatedLabel="Marco HTML generado"
-            />
+            <RenderTelemetry pattern="CSR" generatedAt={generatedAt} generatedLabel="Marco HTML generado" />
           </div>
         </div>
       </main>

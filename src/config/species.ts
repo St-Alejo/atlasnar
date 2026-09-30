@@ -11,8 +11,10 @@ export interface CuratedSpecies {
 
 /**
  * Scientific names, not IDs: keys are resolved at build time through
- * GBIF `/species/match`. Every entry was checked to have records in Nariño
- * (iNaturalist and GBIF) before being added.
+ * GBIF `/species/match`. Every entry was checked to have records inside the
+ * department (iNaturalist place 12737 and GBIF stateProvince=Nariño) before
+ * being added. The Andean condor and the mountain tapir were dropped: their
+ * "Nariño" iNaturalist records were really in Carchi/Imbabura, Ecuador.
  */
 export const CURATED_SPECIES: readonly CuratedSpecies[] = [
   {
@@ -23,11 +25,11 @@ export const CURATED_SPECIES: readonly CuratedSpecies[] = [
     commonName: { es: "Oso de anteojos", en: "Spectacled bear" },
   },
   {
-    slug: "andean-condor",
-    scientificName: "Vultur gryphus",
+    slug: "sparkling-violetear",
+    scientificName: "Colibri coruscans",
     emblem: "bird",
-    thermalFloor: "paramo",
-    commonName: { es: "Cóndor andino", en: "Andean condor" },
+    thermalFloor: "cloud-forest",
+    commonName: { es: "Colibrí chillón", en: "Sparkling violetear" },
   },
   {
     slug: "frailejon-de-narino",
@@ -72,11 +74,11 @@ export const CURATED_SPECIES: readonly CuratedSpecies[] = [
     commonName: { es: "Quetzal cabecidorado", en: "Golden-headed quetzal" },
   },
   {
-    slug: "mountain-tapir",
-    scientificName: "Tapirus pinchaque",
-    emblem: "mammal",
-    thermalFloor: "paramo",
-    commonName: { es: "Danta de páramo", en: "Mountain tapir" },
+    slug: "blue-and-black-tanager",
+    scientificName: "Tangara vassorii",
+    emblem: "bird",
+    thermalFloor: "cloud-forest",
+    commonName: { es: "Tangara azul y negra", en: "Blue-and-black tanager" },
   },
   {
     slug: "fire-star-orchid",

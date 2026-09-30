@@ -23,8 +23,8 @@ export default function HerbariumPage() {
       <main id="main-content">
         <StationHero tone="moss" eyebrow="🌿 Estación · SSG" title="Herbarium">
           <p style={{ opacity: 0.9, maxWidth: "55ch", lineHeight: 1.6 }}>
-            Especímenes prensados: fichas generadas en build y conservadas para siempre.
-            Cada tarjeta es una lámina de herbario real.
+            Especímenes prensados: fichas generadas en build y conservadas para siempre. Cada tarjeta es una
+            lámina de herbario real.
           </p>
         </StationHero>
 

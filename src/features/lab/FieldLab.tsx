@@ -131,7 +131,7 @@ function FiltersBar({ store }: { store: LabStore }) {
         <input
           id="filter-taxon"
           type="search"
-          placeholder="p.ej. Vultur gryphus"
+          placeholder="p.ej. Colibri coruscans"
           value={filters.taxonName}
           onChange={(e) => store.setFilters({ taxonName: e.target.value })}
           style={controlStyle}
@@ -184,7 +184,11 @@ function Results({ store }: { store: LabStore }) {
         aria-live="polite"
         data-testid="lab-status"
         data-status={state.status}
-        style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "0.75rem", color: "var(--color-ink-muted)" }}
+        style={{
+          fontFamily: "var(--font-mono, monospace)",
+          fontSize: "0.75rem",
+          color: "var(--color-ink-muted)",
+        }}
       >
         {state.status === "loading" && "⏳ Consultando iNaturalist desde el navegador…"}
         {state.status === "success" &&
@@ -247,7 +251,9 @@ function ObservationGrid({
 }) {
   if (empty) {
     return (
-      <p style={{ color: "var(--color-ink-muted)", fontStyle: "italic", textAlign: "center", padding: "2rem" }}>
+      <p
+        style={{ color: "var(--color-ink-muted)", fontStyle: "italic", textAlign: "center", padding: "2rem" }}
+      >
         No se encontraron observaciones con esos filtros en Nariño.
       </p>
     );
@@ -308,7 +314,13 @@ function ObservationGrid({
                   {obs.species.scientificName}
                 </button>
                 {obs.species.commonName && (
-                  <p style={{ fontSize: "0.72rem", color: "var(--color-ink-muted)", margin: "0.2rem 0 0.35rem" }}>
+                  <p
+                    style={{
+                      fontSize: "0.72rem",
+                      color: "var(--color-ink-muted)",
+                      margin: "0.2rem 0 0.35rem",
+                    }}
+                  >
                     {obs.species.commonName}
                   </p>
                 )}

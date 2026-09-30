@@ -15,11 +15,7 @@ import { formatCatalogNumber } from "@/lib/formatters";
 // could not stream for real.
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const species = getCuratedSpecies(slug);
   if (!species) return {};
@@ -116,7 +112,11 @@ export default async function DossierPage({ params, searchParams }: PageProps) {
 
             {/* Distribution map panel */}
             <section>
-              <SectionTitle emoji="🗺️" title="Distribución en Nariño" subtitle="GBIF · Puntos de ocurrencia" />
+              <SectionTitle
+                emoji="🗺️"
+                title="Distribución en Nariño"
+                subtitle="GBIF · Puntos de ocurrencia"
+              />
               {streamingOn ? (
                 <Suspense fallback={<MapPanelSkeleton />}>
                   <OccurrenceMapPanel scientificName={species.scientificName} />
@@ -180,15 +180,7 @@ export default async function DossierPage({ params, searchParams }: PageProps) {
   );
 }
 
-function SectionTitle({
-  emoji,
-  title,
-  subtitle,
-}: {
-  emoji: string;
-  title: string;
-  subtitle?: string;
-}) {
+function SectionTitle({ emoji, title, subtitle }: { emoji: string; title: string; subtitle?: string }) {
   return (
     <div style={{ marginBottom: "1rem" }}>
       <h2

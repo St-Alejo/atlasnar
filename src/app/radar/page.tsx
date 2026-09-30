@@ -15,8 +15,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Field Radar · Búsqueda por ubicación",
-  description:
-    "Observaciones de biodiversidad cerca de ti, generadas en el servidor en cada petición (SSR).",
+  description: "Observaciones de biodiversidad cerca de ti, generadas en el servidor en cada petición (SSR).",
 };
 
 const searchSchema = z.object({
@@ -75,9 +74,24 @@ export default async function RadarPage({ searchParams }: PageProps) {
               }}
             >
               {[
-                { name: "lat", label: "Latitud", placeholder: "1.2136", defaultValue: parsed.success ? String(parsed.data.lat) : "" },
-                { name: "lng", label: "Longitud", placeholder: "-77.2811", defaultValue: parsed.success ? String(parsed.data.lng) : "" },
-                { name: "radius", label: "Radio (km)", placeholder: "15", defaultValue: parsed.success ? String(parsed.data.radius) : "15" },
+                {
+                  name: "lat",
+                  label: "Latitud",
+                  placeholder: "1.2136",
+                  defaultValue: parsed.success ? String(parsed.data.lat) : "",
+                },
+                {
+                  name: "lng",
+                  label: "Longitud",
+                  placeholder: "-77.2811",
+                  defaultValue: parsed.success ? String(parsed.data.lng) : "",
+                },
+                {
+                  name: "radius",
+                  label: "Radio (km)",
+                  placeholder: "15",
+                  defaultValue: parsed.success ? String(parsed.data.radius) : "15",
+                },
               ].map((field) => (
                 <div key={field.name} style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
                   <label
@@ -220,18 +234,13 @@ export default async function RadarPage({ searchParams }: PageProps) {
   );
 }
 
-async function ObservationResults({
-  lat,
-  lng,
-  radius,
-}: {
-  lat: number;
-  lng: number;
-  radius: number;
-}) {
+async function ObservationResults({ lat, lng, radius }: { lat: number; lng: number; radius: number }) {
   const result = await getNearbyObservations({ lat, lng, radius });
   if (!result.ok) return <ErrorNotice error={result.error} />;
   return (
-    <ObservationList observations={result.value} emptyMessage="No se encontraron observaciones en ese radio." />
+    <ObservationList
+      observations={result.value}
+      emptyMessage="No se encontraron observaciones en ese radio."
+    />
   );
 }

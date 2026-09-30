@@ -3,7 +3,13 @@
 import dynamic from "next/dynamic";
 import type { PointsMapProps } from "./types";
 
-export function MapSkeleton({ height = 360, label = "🗺️ Cargando mapa…" }: { height?: number; label?: string }) {
+export function MapSkeleton({
+  height = 360,
+  label = "🗺️ Cargando mapa…",
+}: {
+  height?: number;
+  label?: string;
+}) {
   return (
     <div
       aria-hidden="true"

@@ -1,12 +1,7 @@
 import type { Observation, Photo, TaxonProfile } from "@/domain/models";
 import { parseLatLng } from "@/lib/geo";
 import { stripHtml } from "@/lib/text";
-import type {
-  INatObservationDto,
-  INatPhotoDto,
-  INatTaxonDetailDto,
-  INatTaxonSummaryDto,
-} from "./schemas";
+import type { INatObservationDto, INatPhotoDto, INatTaxonDetailDto, INatTaxonSummaryDto } from "./schemas";
 
 const PHOTO_SIZE_PATTERN = /\/(square|thumb|small|medium|large|original)\.(\w+)(\?.*)?$/;
 

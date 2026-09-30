@@ -10,7 +10,13 @@ export default function NotFound() {
         id="main-content"
         style={{ maxWidth: "640px", margin: "0 auto", padding: "4rem 1.5rem", textAlign: "center" }}
       >
-        <p style={{ fontFamily: "var(--font-mono, monospace)", fontSize: "0.75rem", color: "var(--color-ink-muted)" }}>
+        <p
+          style={{
+            fontFamily: "var(--font-mono, monospace)",
+            fontSize: "0.75rem",
+            color: "var(--color-ink-muted)",
+          }}
+        >
           N.º 0404 · Espécimen no catalogado
         </p>
         <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 2.6rem)", margin: "0.5rem 0 1rem" }}>

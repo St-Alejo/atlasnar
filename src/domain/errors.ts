@@ -6,8 +6,5 @@ export interface DomainError {
   readonly status?: number;
 }
 
-export const domainError = (
-  kind: DomainErrorKind,
-  message: string,
-  status?: number,
-): DomainError => (status === undefined ? { kind, message } : { kind, message, status });
+export const domainError = (kind: DomainErrorKind, message: string, status?: number): DomainError =>
+  status === undefined ? { kind, message } : { kind, message, status };

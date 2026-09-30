@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { getBrowserObservationProvider } from "@/adapters/browser.factory";
-import { findMunicipality, NARINO_REGION } from "@/config/municipalities";
+import { findMunicipality, NARINO_INAT_PLACE_ID, NARINO_REGION } from "@/config/municipalities";
 import type { DomainError } from "@/domain/errors";
 import type { Observation, ObservationQuery } from "@/domain/models";
 import type { LabFilters } from "../filters";
 
-const RESULT_LIMIT = 60;
+const RESULT_LIMIT = 30;
 
 export type ObservationsState =
   | { readonly status: "loading" }
@@ -20,6 +20,7 @@ export function toObservationQuery(filters: LabFilters): ObservationQuery {
   return {
     center: area.center,
     radiusKm: area.radiusKm,
+    placeId: NARINO_INAT_PLACE_ID,
     group: filters.group || undefined,
     taxonName: filters.taxonName.trim() || undefined,
     from: filters.from || undefined,

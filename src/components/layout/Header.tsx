@@ -4,7 +4,7 @@ const NAV_ITEMS = [
   { href: "/herbarium", label: "🌿 Herbarium", subtitle: "SSG" },
   { href: "/logbook/pasto", label: "📓 Logbook", subtitle: "ISR" },
   { href: "/radar", label: "📡 Radar", subtitle: "SSR" },
-  { href: "/dossier/andean-condor", label: "🗂️ Dossier", subtitle: "Streaming" },
+  { href: "/dossier/andean-cock-of-the-rock", label: "🗂️ Dossier", subtitle: "Streaming" },
   { href: "/lab", label: "🔬 Field Lab", subtitle: "CSR" },
 ] as const;
 

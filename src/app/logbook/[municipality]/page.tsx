@@ -7,11 +7,7 @@ import { PHASE_PRODUCTION_BUILD } from "next/constants";
 import { StationHero } from "@/components/layout/StationHero";
 import { ErrorNotice } from "@/components/ui/ErrorNotice";
 import { getRecentByMunicipality } from "@/services/observations.service";
-import {
-  findMunicipality,
-  MUNICIPALITIES,
-  PREBUILT_MUNICIPALITY_COUNT,
-} from "@/config/municipalities";
+import { findMunicipality, MUNICIPALITIES, PREBUILT_MUNICIPALITY_COUNT } from "@/config/municipalities";
 import { LOGBOOK_REVALIDATE_SECONDS } from "@/config/timing";
 import Link from "next/link";
 
@@ -29,11 +25,7 @@ export function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ municipality: string }>;
-}) {
+export async function generateMetadata({ params }: { params: Promise<{ municipality: string }> }) {
   const { municipality } = await params;
   const muni = findMunicipality(municipality);
   if (!muni) return {};

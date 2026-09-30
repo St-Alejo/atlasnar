@@ -37,10 +37,7 @@ export function SpecimenCard({
   catalogNumber,
 }: SpecimenCardProps) {
   return (
-    <Link
-      href={`/herbarium/${slug}`}
-      style={{ textDecoration: "none", color: "inherit", display: "block" }}
-    >
+    <Link href={`/herbarium/${slug}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <article
         style={{
           background: "var(--color-paper-light, #FAF6EE)",
@@ -71,9 +68,7 @@ export function SpecimenCard({
         </span>
 
         {/* Emblem icon */}
-        <div style={{ fontSize: "2.5rem", lineHeight: 1 }}>
-          {EMBLEM_ICON[emblem] ?? "🌿"}
-        </div>
+        <div style={{ fontSize: "2.5rem", lineHeight: 1 }}>{EMBLEM_ICON[emblem] ?? "🌿"}</div>
 
         {/* Names */}
         <div style={{ flex: 1 }}>

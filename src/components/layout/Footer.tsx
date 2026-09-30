@@ -42,8 +42,7 @@ export function Footer() {
               maxWidth: "22ch",
             }}
           >
-            Un cuaderno de campo para leer el territorio, y una excusa para
-            entender cómo se renderiza la web.
+            Un cuaderno de campo para leer el territorio, y una excusa para entender cómo se renderiza la web.
           </p>
         </div>
 
@@ -100,9 +99,10 @@ export function Footer() {
             Contexto académico
           </p>
           <p style={{ fontSize: "0.78rem", opacity: 0.7, lineHeight: 1.5 }}>
-            Programación Orientada a la Web<br />
-            Taller: Patrones de Rendering<br />
-            © {year}
+            Programación Orientada a la Web
+            <br />
+            Taller: Patrones de Rendering
+            <br />© {year}
           </p>
         </div>
       </div>

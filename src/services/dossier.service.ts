@@ -3,7 +3,7 @@ import type { DomainError } from "@/domain/errors";
 import type { Observation, OccurrencePoint, Photo } from "@/domain/models";
 import { mapResult, type Result } from "@/domain/result";
 import { DOSSIER_PANEL_LATENCY_FACTORS } from "@/config/timing";
-import { NARINO_GBIF_FILTER, NARINO_REGION } from "@/config/municipalities";
+import { NARINO_GBIF_FILTER, NARINO_INAT_PLACE_ID, NARINO_REGION } from "@/config/municipalities";
 import {
   createOccurrenceProvider,
   createObservationProvider,
@@ -29,7 +29,9 @@ async function demoDelay(panel: PanelKey): Promise<void> {
 }
 
 /** Photos panel: openly licensed iNaturalist taxon photos. */
-export async function getDossierPhotos(scientificName: string): Promise<Result<readonly Photo[], DomainError>> {
+export async function getDossierPhotos(
+  scientificName: string,
+): Promise<Result<readonly Photo[], DomainError>> {
   await demoDelay("photos");
   const result = await profile.getTaxonProfile(scientificName, "es");
   return mapResult(result, (taxon) => taxon.photos);
@@ -58,6 +60,7 @@ export async function getDossierSightings(
   return observations.getObservations({
     center: NARINO_REGION.center,
     radiusKm: NARINO_REGION.radiusKm,
+    placeId: NARINO_INAT_PLACE_ID,
     taxonName: scientificName,
     limit: SIGHTINGS_LIMIT,
     locale: "es",
