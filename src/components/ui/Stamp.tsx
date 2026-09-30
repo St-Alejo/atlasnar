@@ -1,4 +1,4 @@
-import type { RenderPattern } from "@/components/telemetry/RenderTelemetry";
+import type { RenderPattern } from "@/components/telemetry/patterns";
 
 interface StampProps {
   label: RenderPattern;

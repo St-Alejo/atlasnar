@@ -4,13 +4,15 @@ import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { RenderTelemetry } from "@/components/telemetry/RenderTelemetry";
-import { ContourBackground } from "@/components/ui/ContourBackground";
+import { StationHero } from "@/components/layout/StationHero";
 import { PhotosPanel, PhotosSkeleton } from "@/features/dossier/PhotosPanel";
-import { OccurrenceMapPanel, MapSkeleton } from "@/features/dossier/OccurrenceMapPanel";
+import { OccurrenceMapPanel, MapPanelSkeleton } from "@/features/dossier/OccurrenceMapPanel";
 import { RecentSightingsPanel, SightingsSkeleton } from "@/features/dossier/RecentSightingsPanel";
-import { getSpeciesBySlug } from "@/services/species.service";
+import { getCuratedSpecies } from "@/services/species.service";
 import { formatCatalogNumber } from "@/lib/formatters";
 
+// Rendered on every request: a prerendered page has complete HTML and
+// could not stream for real.
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
@@ -19,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const species = await getSpeciesBySlug(slug);
+  const species = getCuratedSpecies(slug);
   if (!species) return {};
   return {
     title: `${species.commonName} · Dossier`,
@@ -37,98 +39,54 @@ export default async function DossierPage({ params, searchParams }: PageProps) {
   const { stream } = await searchParams;
   const streamingOn = stream !== "off";
 
-  const species = await getSpeciesBySlug(slug);
+  // The shell uses curated data only (no network), so it is sent at once.
+  const species = getCuratedSpecies(slug);
   if (!species) notFound();
 
   const generatedAt = new Date().toISOString();
+  const toggleStyle = (active: boolean) => ({
+    padding: "0.3rem 0.9rem",
+    borderRadius: "var(--radius-full)",
+    fontSize: "0.78rem",
+    fontWeight: 600,
+    textDecoration: "none",
+    background: active ? "#F1EAD8" : "rgba(241,234,216,0.15)",
+    color: active ? "#A93A24" : "#F1EAD8",
+    border: "1px solid rgba(241,234,216,0.5)",
+  });
 
   return (
     <>
       <Header />
       <main id="main-content">
-        {/* Page header */}
-        <div
-          style={{
-            position: "relative",
-            background: "var(--color-cinnabar)",
-            color: "var(--color-paper)",
-            padding: "3rem 1.5rem 2.5rem",
-            overflow: "hidden",
-          }}
+        <StationHero
+          tone="cinnabar"
+          eyebrow={`🗂️ Estación · Streaming SSR · ${formatCatalogNumber(species.catalogNumber)}`}
+          title={species.commonName}
         >
-          <ContourBackground />
-          <div style={{ position: "relative", zIndex: 1, maxWidth: "1200px", margin: "0 auto" }}>
-            <p
-              style={{
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.65rem",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--color-ochre)",
-                marginBottom: "0.5rem",
-              }}
-            >
-              🗂️ Estación · Streaming SSR
-            </p>
-            <p
-              style={{
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.72rem",
-                opacity: 0.75,
-                marginBottom: "0.25rem",
-              }}
-            >
-              {formatCatalogNumber(species.catalogNumber)}
-            </p>
-            <h1
-              style={{
-                fontFamily: "var(--font-display, Georgia, serif)",
-                fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-                fontWeight: 800,
-                margin: "0 0 0.2rem",
-              }}
-            >
-              {species.commonName}
-            </h1>
-            <p style={{ fontStyle: "italic", fontSize: "1.1rem", opacity: 0.8, margin: "0 0 1rem" }}>
-              {species.scientificName}
-            </p>
+          <p style={{ fontStyle: "italic", fontSize: "1.1rem", opacity: 0.9, margin: "0 0 1rem" }}>
+            {species.scientificName}
+          </p>
 
-            {/* Streaming toggle */}
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-              <Link
-                href={`/dossier/${slug}`}
-                style={{
-                  padding: "0.3rem 0.9rem",
-                  borderRadius: "var(--radius-full)",
-                  fontSize: "0.78rem",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  background: streamingOn ? "var(--color-paper)" : "rgba(241,234,216,0.2)",
-                  color: streamingOn ? "var(--color-cinnabar)" : "var(--color-paper)",
-                  border: "1px solid rgba(241,234,216,0.4)",
-                }}
-              >
-                ⚡ Streaming ON
-              </Link>
-              <Link
-                href={`/dossier/${slug}?stream=off`}
-                style={{
-                  padding: "0.3rem 0.9rem",
-                  borderRadius: "var(--radius-full)",
-                  fontSize: "0.78rem",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  background: !streamingOn ? "var(--color-paper)" : "rgba(241,234,216,0.2)",
-                  color: !streamingOn ? "var(--color-cinnabar)" : "var(--color-paper)",
-                  border: "1px solid rgba(241,234,216,0.4)",
-                }}
-              >
-                ⏸️ Streaming OFF
-              </Link>
-            </div>
-          </div>
-        </div>
+          {/* Streaming toggle: plain links force a full document request, */}
+          {/* so the difference is visible on every click. */}
+          <nav aria-label="Modo de streaming" style={{ display: "flex", gap: "0.5rem" }}>
+            <a
+              href={`/dossier/${slug}`}
+              aria-current={streamingOn ? "page" : undefined}
+              style={toggleStyle(streamingOn)}
+            >
+              ⚡ Streaming ON
+            </a>
+            <a
+              href={`/dossier/${slug}?stream=off`}
+              aria-current={!streamingOn ? "page" : undefined}
+              style={toggleStyle(!streamingOn)}
+            >
+              ⏸️ Streaming OFF
+            </a>
+          </nav>
+        </StationHero>
 
         {/* Content */}
         <div
@@ -160,7 +118,7 @@ export default async function DossierPage({ params, searchParams }: PageProps) {
             <section>
               <SectionTitle emoji="🗺️" title="Distribución en Nariño" subtitle="GBIF · Puntos de ocurrencia" />
               {streamingOn ? (
-                <Suspense fallback={<MapSkeleton />}>
+                <Suspense fallback={<MapPanelSkeleton />}>
                   <OccurrenceMapPanel scientificName={species.scientificName} />
                 </Suspense>
               ) : (
@@ -201,7 +159,13 @@ export default async function DossierPage({ params, searchParams }: PageProps) {
           </article>
 
           <div>
-            <RenderTelemetry pattern="STREAMING" generatedAt={generatedAt} />
+            <RenderTelemetry pattern={streamingOn ? "STREAMING" : "SSR"} generatedAt={generatedAt} />
+            {!streamingOn && (
+              <p style={{ fontSize: "0.78rem", color: "var(--color-ink-muted)", marginTop: "0.75rem" }}>
+                Modo comparación: sin fronteras de <code>Suspense</code>, el servidor espera a los tres
+                paneles antes de enviar el primer byte de la página.
+              </p>
+            )}
           </div>
         </div>
       </main>

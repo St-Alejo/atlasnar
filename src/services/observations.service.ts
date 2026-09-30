@@ -1,63 +1,45 @@
 import "server-only";
+import type { DomainError } from "@/domain/errors";
+import { domainError } from "@/domain/errors";
 import type { Observation } from "@/domain/models";
-import { findMunicipality, NARINO_REGION } from "@/config/municipalities";
+import { err, type Result } from "@/domain/result";
+import { findMunicipality } from "@/config/municipalities";
 import { createObservationProvider } from "@/adapters/provider.factory";
 
 const observations = createObservationProvider();
 
 const DEFAULT_LIMIT = 20;
+const LOCALE = "es";
+
+export type ObservationsResult = Result<Observation[], DomainError>;
 
 /** Recent observations for a given municipality slug (Logbook / ISR). */
 export async function getRecentByMunicipality(
   municipalitySlug: string,
   limit = DEFAULT_LIMIT,
-): Promise<Observation[]> {
+): Promise<ObservationsResult> {
   const muni = findMunicipality(municipalitySlug);
-  if (!muni) return [];
+  if (!muni) return err(domainError("not-found", `Unknown municipality: ${municipalitySlug}`));
 
-  const result = await observations.getObservations({
+  return observations.getObservations({
     center: muni.center,
     radiusKm: muni.radiusKm,
     limit,
-    locale: "es",
+    locale: LOCALE,
   });
-
-  return result.ok ? result.value : [];
 }
 
-/** Observations near a point with optional filters (Radar / SSR). */
+/** Observations near a point (Radar / SSR). */
 export async function getNearbyObservations(params: {
   lat: number;
   lng: number;
   radius: number;
   limit?: number;
-}): Promise<Observation[]> {
-  const result = await observations.getObservations({
+}): Promise<ObservationsResult> {
+  return observations.getObservations({
     center: { lat: params.lat, lng: params.lng },
     radiusKm: params.radius,
     limit: params.limit ?? DEFAULT_LIMIT,
-    locale: "es",
+    locale: LOCALE,
   });
-
-  return result.ok ? result.value : [];
-}
-
-/** Region-wide observations for a given taxon name (Dossier sightings panel). */
-export async function getSightingsBySpecies(
-  scientificName: string,
-  limit = 15,
-  signal?: AbortSignal,
-): Promise<Observation[]> {
-  const result = await observations.getObservations(
-    {
-      center: NARINO_REGION.center,
-      radiusKm: NARINO_REGION.radiusKm,
-      taxonName: scientificName,
-      limit,
-      locale: "es",
-    },
-    signal,
-  );
-
-  return result.ok ? result.value : [];
 }

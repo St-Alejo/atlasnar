@@ -3,20 +3,30 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { RenderTelemetry } from "@/components/telemetry/RenderTelemetry";
 import { ObservationList } from "@/features/logbook/ObservationList";
-import { ContourBackground } from "@/components/ui/ContourBackground";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
+import { StationHero } from "@/components/layout/StationHero";
+import { ErrorNotice } from "@/components/ui/ErrorNotice";
 import { getRecentByMunicipality } from "@/services/observations.service";
-import { findMunicipality, MUNICIPALITIES } from "@/config/municipalities";
+import {
+  findMunicipality,
+  MUNICIPALITIES,
+  PREBUILT_MUNICIPALITY_COUNT,
+} from "@/config/municipalities";
 import { LOGBOOK_REVALIDATE_SECONDS } from "@/config/timing";
 import Link from "next/link";
 
-// ISR: regenerate in the background every 60 seconds
+// ISR: regenerate in the background every 60 seconds.
+// Must be a literal (statically analysed); a unit test keeps it equal to
+// LOGBOOK_REVALIDATE_SECONDS.
 export const revalidate = 60;
 // Municipalities not prebuilt are generated on first request
 export const dynamicParams = true;
 
 export function generateStaticParams() {
   // Prebuild only the most-visited; the rest are lazy on first request
-  return MUNICIPALITIES.slice(0, 2).map(({ slug }) => ({ municipality: slug }));
+  return MUNICIPALITIES.slice(0, PREBUILT_MUNICIPALITY_COUNT).map(({ slug }) => ({
+    municipality: slug,
+  }));
 }
 
 export async function generateMetadata({
@@ -42,54 +52,26 @@ export default async function LogbookPage({ params }: PageProps) {
   const muni = findMunicipality(municipality);
   if (!muni) notFound();
 
-  const observations = await getRecentByMunicipality(municipality);
+  const result = await getRecentByMunicipality(municipality);
+  // A failed background regeneration must not replace the last good page:
+  // throwing keeps serving the previous version and retries on the next
+  // request. During `next build` there is no previous version, so the page
+  // is rendered with an error notice instead of failing the whole build.
+  if (!result.ok && process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    throw new Error(`Logbook regeneration failed: ${result.error.message}`);
+  }
   const generatedAt = new Date().toISOString();
 
   return (
     <>
       <Header />
       <main id="main-content">
-        {/* Header */}
-        <div
-          style={{
-            position: "relative",
-            background: "var(--color-ochre)",
-            color: "var(--color-ink)",
-            padding: "3rem 1.5rem 2.5rem",
-            overflow: "hidden",
-          }}
-        >
-          <ContourBackground />
-          <div style={{ position: "relative", zIndex: 1, maxWidth: "1200px", margin: "0 auto" }}>
-            <p
-              style={{
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.65rem",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--color-ink)",
-                opacity: 0.65,
-                marginBottom: "0.5rem",
-              }}
-            >
-              📓 Estación · ISR
-            </p>
-            <h1
-              style={{
-                fontFamily: "var(--font-display, Georgia, serif)",
-                fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-                fontWeight: 800,
-                margin: "0 0 0.5rem",
-              }}
-            >
-              Logbook · {muni.name}
-            </h1>
-            <p style={{ opacity: 0.75, maxWidth: "50ch", lineHeight: 1.6 }}>
-              Observaciones recientes de biodiversidad. Revalida automáticamente cada{" "}
-              {LOGBOOK_REVALIDATE_SECONDS} s en segundo plano.
-            </p>
-          </div>
-        </div>
+        <StationHero tone="ochre" eyebrow="📓 Estación · ISR" title={`Logbook · ${muni.name}`}>
+          <p style={{ opacity: 0.85, maxWidth: "50ch", lineHeight: 1.6 }}>
+            Observaciones recientes de biodiversidad. Revalida automáticamente cada{" "}
+            {LOGBOOK_REVALIDATE_SECONDS} s en segundo plano.
+          </p>
+        </StationHero>
 
         {/* Municipality selector */}
         <nav
@@ -145,7 +127,11 @@ export default async function LogbookPage({ params }: PageProps) {
           className="logbook-layout"
         >
           <section>
-            <ObservationList observations={observations} />
+            {result.ok ? (
+              <ObservationList observations={result.value} />
+            ) : (
+              <ErrorNotice error={result.error} />
+            )}
           </section>
           <div>
             <RenderTelemetry

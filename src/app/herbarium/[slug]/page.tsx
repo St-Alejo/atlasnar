@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -52,9 +53,9 @@ export default async function SpeciesPage({ params }: PageProps) {
             color: "var(--color-ink-muted)",
           }}
         >
-          <a href="/" style={{ color: "inherit", textDecoration: "none" }}>Inicio</a>
+          <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>Inicio</Link>
           {" / "}
-          <a href="/herbarium" style={{ color: "inherit", textDecoration: "none" }}>Herbarium</a>
+          <Link href="/herbarium" style={{ color: "inherit", textDecoration: "none" }}>Herbarium</Link>
           {" / "}
           <span>{species.commonName}</span>
         </nav>

@@ -1,5 +1,7 @@
 import "server-only";
-import type { Observation, OccurrencePoint, TaxonProfile } from "@/domain/models";
+import type { DomainError } from "@/domain/errors";
+import type { Observation, OccurrencePoint, Photo } from "@/domain/models";
+import { mapResult, type Result } from "@/domain/result";
 import { DOSSIER_PANEL_LATENCY_FACTORS } from "@/config/timing";
 import { NARINO_GBIF_FILTER, NARINO_REGION } from "@/config/municipalities";
 import {
@@ -15,57 +17,49 @@ const occurrences = createOccurrenceProvider();
 const profile = createProfileProvider();
 const observations = createObservationProvider();
 
-/** Artificial delay to make streaming visible in demo mode. */
-async function demoDelay(factor: number): Promise<void> {
-  const ms = env.DEMO_LATENCY_MS * factor;
-  if (ms > 0) await new Promise((r) => setTimeout(r, ms));
+const OCCURRENCE_LIMIT = 300;
+const SIGHTINGS_LIMIT = 12;
+
+type PanelKey = keyof typeof DOSSIER_PANEL_LATENCY_FACTORS;
+
+/** Artificial, per-panel delay that makes streaming visible in demo mode. */
+async function demoDelay(panel: PanelKey): Promise<void> {
+  const ms = env.DEMO_LATENCY_MS * DOSSIER_PANEL_LATENCY_FACTORS[panel];
+  if (ms > 0) await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Photos panel: iNaturalist taxon profile photos. */
-export async function getDossierPhotos(
-  scientificName: string,
-  signal?: AbortSignal,
-): Promise<TaxonProfile["photos"]> {
-  await demoDelay(DOSSIER_PANEL_LATENCY_FACTORS.photos);
-  const result = await profile.getTaxonProfile(scientificName, "es", signal);
-  return result.ok ? result.value.photos : [];
+/** Photos panel: openly licensed iNaturalist taxon photos. */
+export async function getDossierPhotos(scientificName: string): Promise<Result<readonly Photo[], DomainError>> {
+  await demoDelay("photos");
+  const result = await profile.getTaxonProfile(scientificName, "es");
+  return mapResult(result, (taxon) => taxon.photos);
 }
 
-/** Map panel: GBIF occurrence points in Nariño. */
+/** Map panel: GBIF georeferenced occurrences in Nariño. */
 export async function getDossierOccurrences(
   scientificName: string,
-  signal?: AbortSignal,
-): Promise<OccurrencePoint[]> {
-  await demoDelay(DOSSIER_PANEL_LATENCY_FACTORS.map);
-  const matchResult = await taxonomy.matchSpecies(scientificName, signal);
-  if (!matchResult.ok) return [];
+): Promise<Result<OccurrencePoint[], DomainError>> {
+  await demoDelay("map");
+  const match = await taxonomy.matchSpecies(scientificName);
+  if (!match.ok) return match;
 
-  const result = await occurrences.getOccurrencePoints(
-    {
-      taxonKey: matchResult.value.key,
-      ...NARINO_GBIF_FILTER,
-      limit: 200,
-    },
-    signal,
-  );
-  return result.ok ? result.value : [];
+  return occurrences.getOccurrencePoints({
+    taxonKey: match.value.key,
+    ...NARINO_GBIF_FILTER,
+    limit: OCCURRENCE_LIMIT,
+  });
 }
 
-/** Sightings panel: recent iNaturalist observations in the Nariño region. */
+/** Sightings panel: recent iNaturalist observations across Nariño. */
 export async function getDossierSightings(
   scientificName: string,
-  signal?: AbortSignal,
-): Promise<Observation[]> {
-  await demoDelay(DOSSIER_PANEL_LATENCY_FACTORS.sightings);
-  const result = await observations.getObservations(
-    {
-      center: NARINO_REGION.center,
-      radiusKm: NARINO_REGION.radiusKm,
-      taxonName: scientificName,
-      limit: 12,
-      locale: "es",
-    },
-    signal,
-  );
-  return result.ok ? result.value : [];
+): Promise<Result<Observation[], DomainError>> {
+  await demoDelay("sightings");
+  return observations.getObservations({
+    center: NARINO_REGION.center,
+    radiusKm: NARINO_REGION.radiusKm,
+    taxonName: scientificName,
+    limit: SIGHTINGS_LIMIT,
+    locale: "es",
+  });
 }

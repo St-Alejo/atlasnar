@@ -12,8 +12,8 @@ export function Header() {
   return (
     <header
       style={{
-        background: "var(--color-ink)",
-        color: "var(--color-paper)",
+        background: "var(--color-chrome)",
+        color: "var(--color-chrome-text)",
         borderBottom: "2px solid var(--color-moss)",
         position: "sticky",
         top: 0,
@@ -47,7 +47,7 @@ export function Header() {
               fontFamily: "var(--font-display, Georgia, serif)",
               fontSize: "1.1rem",
               fontWeight: 700,
-              color: "var(--color-paper)",
+              color: "var(--color-chrome-text)",
               letterSpacing: "-0.01em",
             }}
           >
@@ -57,7 +57,7 @@ export function Header() {
             style={{
               fontFamily: "var(--font-mono, monospace)",
               fontSize: "0.6rem",
-              color: "var(--color-ochre)",
+              color: "var(--color-chrome-accent)",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
             }}
@@ -97,7 +97,7 @@ export function Header() {
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: 500,
-                      color: "var(--color-paper)",
+                      color: "var(--color-chrome-text)",
                     }}
                   >
                     {item.label}
@@ -106,7 +106,7 @@ export function Header() {
                     style={{
                       fontSize: "0.55rem",
                       fontFamily: "var(--font-mono, monospace)",
-                      color: "var(--color-ochre)",
+                      color: "var(--color-chrome-accent)",
                       letterSpacing: "0.08em",
                     }}
                   >

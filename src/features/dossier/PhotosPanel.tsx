@@ -1,10 +1,14 @@
 import Image from "next/image";
-import type { TaxonProfile } from "@/domain/models";
+import { ErrorNotice } from "@/components/ui/ErrorNotice";
 import { getDossierPhotos } from "@/services/dossier.service";
 
-export async function PhotosPanel({ scientificName }: { scientificName: string }) {
-  const photos = await getDossierPhotos(scientificName);
+const MAX_PHOTOS = 6;
 
+export async function PhotosPanel({ scientificName }: { scientificName: string }) {
+  const result = await getDossierPhotos(scientificName);
+  if (!result.ok) return <ErrorNotice error={result.error} />;
+
+  const photos = result.value.slice(0, MAX_PHOTOS);
   if (photos.length === 0) {
     return (
       <p style={{ color: "var(--color-ink-muted)", fontStyle: "italic", padding: "1rem 0" }}>
@@ -15,15 +19,16 @@ export async function PhotosPanel({ scientificName }: { scientificName: string }
 
   return (
     <div
+      data-testid="panel-photos"
+      className="animate-reveal"
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
         gap: "0.75rem",
-        animation: "reveal 0.5s ease-out both",
       }}
     >
-      {photos.slice(0, 8).map((photo) => (
-        <figure key={photo.url} style={{ margin: 0, position: "relative" }}>
+      {photos.map((photo, index) => (
+        <figure key={photo.id} style={{ margin: 0 }}>
           <div
             style={{
               position: "relative",
@@ -33,28 +38,27 @@ export async function PhotosPanel({ scientificName }: { scientificName: string }
             }}
           >
             <Image
-              src={photo.url.replace(/\/square\./, "/medium.")}
-              alt={photo.attribution ?? scientificName}
+              src={photo.url}
+              alt={`Fotografía ${index + 1} de ${scientificName}`}
               fill
-              sizes="200px"
+              sizes="(max-width: 720px) 50vw, 200px"
               style={{ objectFit: "cover" }}
             />
           </div>
-          {photo.attribution && (
-            <figcaption
-              style={{
-                fontSize: "0.6rem",
-                color: "var(--color-ink-muted)",
-                marginTop: "0.2rem",
-                fontFamily: "var(--font-mono, monospace)",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {photo.attribution}
-            </figcaption>
-          )}
+          <figcaption
+            style={{
+              fontSize: "0.6rem",
+              color: "var(--color-ink-muted)",
+              marginTop: "0.2rem",
+              fontFamily: "var(--font-mono, monospace)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+            title={photo.attribution}
+          >
+            {photo.attribution} · {photo.license}
+          </figcaption>
         </figure>
       ))}
     </div>
@@ -64,6 +68,8 @@ export async function PhotosPanel({ scientificName }: { scientificName: string }
 export function PhotosSkeleton() {
   return (
     <div
+      data-testid="skeleton-photos"
+      aria-hidden="true"
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",

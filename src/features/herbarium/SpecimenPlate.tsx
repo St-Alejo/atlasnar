@@ -1,8 +1,9 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Species } from "@/domain/models";
 import { RenderTelemetry } from "@/components/telemetry/RenderTelemetry";
-import { formatCatalogNumber, formatDate } from "@/lib/formatters";
+import { formatCatalogNumber } from "@/lib/formatters";
 
 const FLOOR_LABEL: Record<string, string> = {
   coast: "Costa Pacífica",
@@ -156,14 +157,14 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
                   ["Estado GBIF", species.taxonomy.status],
                 ].map(([label, value]) =>
                   value ? (
-                    <>
-                      <dt key={`dt-${label}`} style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono, monospace)", fontSize: "0.75rem" }}>
+                    <Fragment key={label}>
+                      <dt style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono, monospace)", fontSize: "0.75rem" }}>
                         {label}
                       </dt>
-                      <dd key={`dd-${label}`} style={{ margin: 0, fontStyle: label === "Familia" ? "italic" : "normal" }}>
+                      <dd style={{ margin: 0, fontStyle: label === "Familia" ? "italic" : "normal" }}>
                         {value}
                       </dd>
-                    </>
+                    </Fragment>
                   ) : null,
                 )}
               </dl>
@@ -177,7 +178,7 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
                 marginTop: "1rem",
                 padding: "0.4rem 0.8rem",
                 background: "var(--color-cinnabar)",
-                color: "#F1EAD8",
+                color: "var(--color-paper)",
                 borderRadius: "var(--radius-md)",
                 fontSize: "0.8rem",
                 fontWeight: 600,
@@ -210,9 +211,9 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
                   gap: "0.5rem",
                 }}
               >
-                {species.profile.photos.slice(1, 6).map((photo) => (
+                {species.profile.photos.slice(1, 6).map((photo, index) => (
                   <div
-                    key={photo.url}
+                    key={photo.id}
                     style={{
                       position: "relative",
                       aspectRatio: "1",
@@ -222,7 +223,8 @@ export function SpecimenPlate({ species, generatedAt }: SpecimenPlateProps) {
                   >
                     <Image
                       src={photo.url}
-                      alt={photo.attribution ?? species.scientificName}
+                      alt={`Fotografía ${index + 2} de ${species.scientificName}`}
+                      title={`${photo.attribution} · ${photo.license}`}
                       fill
                       sizes="120px"
                       style={{ objectFit: "cover" }}

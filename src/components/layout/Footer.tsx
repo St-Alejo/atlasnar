@@ -3,8 +3,8 @@ export function Footer() {
   return (
     <footer
       style={{
-        background: "var(--color-ink)",
-        color: "var(--color-paper)",
+        background: "var(--color-chrome)",
+        color: "var(--color-chrome-text)",
         borderTop: "2px solid var(--color-moss)",
         padding: "2rem 1.5rem",
         marginTop: "auto",
@@ -28,7 +28,7 @@ export function Footer() {
               fontSize: "1rem",
               fontWeight: 700,
               marginBottom: "0.4rem",
-              color: "var(--color-paper)",
+              color: "var(--color-chrome-text)",
             }}
           >
             🦜 Andean Field Atlas
@@ -36,7 +36,7 @@ export function Footer() {
           <p
             style={{
               fontSize: "0.78rem",
-              color: "var(--color-paper)",
+              color: "var(--color-chrome-text)",
               opacity: 0.6,
               lineHeight: 1.5,
               maxWidth: "22ch",
@@ -55,7 +55,7 @@ export function Footer() {
               fontSize: "0.65rem",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: "var(--color-ochre)",
+              color: "var(--color-chrome-accent)",
               marginBottom: "0.5rem",
             }}
           >
@@ -93,7 +93,7 @@ export function Footer() {
               fontSize: "0.65rem",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: "var(--color-ochre)",
+              color: "var(--color-chrome-accent)",
               marginBottom: "0.5rem",
             }}
           >

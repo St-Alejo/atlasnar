@@ -4,7 +4,9 @@ import { Footer } from "@/components/layout/Footer";
 import { RenderTelemetry } from "@/components/telemetry/RenderTelemetry";
 import { ObservationList } from "@/features/logbook/ObservationList";
 import { LocateMeButton } from "@/features/radar/LocateMeButton";
-import { ContourBackground } from "@/components/ui/ContourBackground";
+import { StationHero } from "@/components/layout/StationHero";
+import { ErrorNotice } from "@/components/ui/ErrorNotice";
+import { MUNICIPALITIES } from "@/config/municipalities";
 import { getNearbyObservations } from "@/services/observations.service";
 import { formatCoords } from "@/lib/formatters";
 
@@ -35,46 +37,12 @@ export default async function RadarPage({ searchParams }: PageProps) {
     <>
       <Header />
       <main id="main-content">
-        {/* Header */}
-        <div
-          style={{
-            position: "relative",
-            background: "var(--color-slate)",
-            color: "var(--color-paper)",
-            padding: "3rem 1.5rem 2.5rem",
-            overflow: "hidden",
-          }}
-        >
-          <ContourBackground />
-          <div style={{ position: "relative", zIndex: 1, maxWidth: "1200px", margin: "0 auto" }}>
-            <p
-              style={{
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.65rem",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--color-ochre)",
-                marginBottom: "0.5rem",
-              }}
-            >
-              📡 Estación · SSR
-            </p>
-            <h1
-              style={{
-                fontFamily: "var(--font-display, Georgia, serif)",
-                fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-                fontWeight: 800,
-                margin: "0 0 0.75rem",
-              }}
-            >
-              Field Radar
-            </h1>
-            <p style={{ opacity: 0.8, maxWidth: "55ch", lineHeight: 1.6 }}>
-              Sondeo hecho <em>ahora</em>: el servidor consulta iNaturalist con los parámetros de esta petición
-              y devuelve el HTML completo. La hora cambia en cada recarga.
-            </p>
-          </div>
-        </div>
+        <StationHero tone="slate" eyebrow="📡 Estación · SSR" title="Field Radar">
+          <p style={{ opacity: 0.9, maxWidth: "55ch", lineHeight: 1.6 }}>
+            Sondeo hecho <em>ahora</em>: el servidor consulta iNaturalist con los parámetros de esta petición
+            y devuelve el HTML completo. La hora cambia en cada recarga.
+          </p>
+        </StationHero>
 
         {/* Content */}
         <div
@@ -149,7 +117,7 @@ export default async function RadarPage({ searchParams }: PageProps) {
                 type="submit"
                 style={{
                   padding: "0.45rem 1.2rem",
-                  background: "var(--color-slate)",
+                  background: "var(--color-moss)",
                   color: "var(--color-paper)",
                   border: "none",
                   borderRadius: "var(--radius-full)",
@@ -189,10 +157,35 @@ export default async function RadarPage({ searchParams }: PageProps) {
                   📡 Ingresa coordenadas o usa tu ubicación
                 </p>
                 <p style={{ color: "var(--color-ink-muted)", fontSize: "0.85rem" }}>
-                  El radar buscará observaciones dentro del radio indicado.
-                  <br />
-                  Pasto: lat 1.2136, lng -77.2811
+                  El radar buscará observaciones dentro del radio indicado. O prueba un municipio:
                 </p>
+                <ul
+                  aria-label="Coordenadas de ejemplo"
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: "0.75rem 0 0",
+                    display: "flex",
+                    gap: "0.5rem",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                  }}
+                >
+                  {MUNICIPALITIES.map((m) => (
+                    <li key={m.slug}>
+                      <a
+                        href={`/radar?lat=${m.center.lat}&lng=${m.center.lng}&radius=${m.radiusKm}`}
+                        style={{
+                          fontFamily: "var(--font-mono, monospace)",
+                          fontSize: "0.75rem",
+                          color: "var(--color-moss)",
+                        }}
+                      >
+                        {m.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ) : (
               <>
@@ -236,6 +229,9 @@ async function ObservationResults({
   lng: number;
   radius: number;
 }) {
-  const observations = await getNearbyObservations({ lat, lng, radius });
-  return <ObservationList observations={observations} emptyMessage="No se encontraron observaciones en ese radio." />;
+  const result = await getNearbyObservations({ lat, lng, radius });
+  if (!result.ok) return <ErrorNotice error={result.error} />;
+  return (
+    <ObservationList observations={result.value} emptyMessage="No se encontraron observaciones en ese radio." />
+  );
 }

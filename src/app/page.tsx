@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { AltitudeGauge } from "@/components/layout/AltitudeGauge";
+import { RenderTelemetry } from "@/components/telemetry/RenderTelemetry";
 import { ContourBackground } from "@/components/ui/ContourBackground";
 import { Stamp } from "@/components/ui/Stamp";
 
@@ -70,19 +72,41 @@ const COMPARISON_ROWS = [
   { label: "JS requerido", ssg: "No", isr: "No", ssr: "No", streaming: "No", csr: "Sí" },
 ] as const;
 
+const THERMAL_FLOORS = [
+  {
+    name: "Páramo",
+    range: "3.000 – 4.800 m s.n.m.",
+    color: "#D9A441",
+    text: "Frailejones, puyas y el oso de anteojos. Fábrica de agua a los pies de los volcanes Galeras, Azufral y Cumbal.",
+  },
+  {
+    name: "Bosque de niebla",
+    range: "1.000 – 3.000 m s.n.m.",
+    color: "#3E5C3A",
+    text: "Colibríes, quetzales y gallitos de las rocas entre musgos, bromelias y orquídeas.",
+  },
+  {
+    name: "Costa Pacífica",
+    range: "0 – 1.000 m s.n.m.",
+    color: "#6B9BA8",
+    text: "Manglares y selva húmeda del Chocó biogeográfico, de Tumaco a Barbacoas.",
+  },
+] as const;
+
 export default function HomePage() {
   const buildTime = new Date().toISOString();
 
   return (
     <>
+      <AltitudeGauge />
       <Header />
       <main id="main-content">
         {/* Hero */}
         <section
           style={{
             position: "relative",
-            background: "var(--color-ink)",
-            color: "var(--color-paper)",
+            background: "var(--color-chrome)",
+            color: "var(--color-chrome-text)",
             padding: "5rem 1.5rem 4rem",
             overflow: "hidden",
             textAlign: "center",
@@ -118,7 +142,7 @@ export default function HomePage() {
               style={{
                 fontSize: "1.1rem",
                 lineHeight: 1.65,
-                color: "color-mix(in srgb, var(--color-paper) 80%, transparent)",
+                color: "color-mix(in srgb, var(--color-chrome-text) 85%, transparent)",
                 maxWidth: "55ch",
                 margin: "0 auto 2rem",
               }}
@@ -227,6 +251,47 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Thermal floors: the page "descends" from páramo to coast, as the gauge shows */}
+        <section
+          aria-labelledby="floors-title"
+          style={{ maxWidth: "1200px", margin: "0 auto", padding: "1rem 1.5rem 3rem" }}
+        >
+          <h2
+            id="floors-title"
+            style={{ fontFamily: "var(--font-display, Georgia, serif)", fontSize: "1.6rem", marginBottom: "1.5rem" }}
+          >
+            Pisos térmicos de Nariño
+          </h2>
+          <ol style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: "1rem" }}>
+            {THERMAL_FLOORS.map((floor) => (
+              <li
+                key={floor.name}
+                style={{
+                  borderLeft: `6px solid ${floor.color}`,
+                  background: "var(--color-paper-light)",
+                  borderRadius: "var(--radius-md)",
+                  padding: "1.25rem 1.5rem",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-mono, monospace)",
+                    fontSize: "0.7rem",
+                    color: "var(--color-ink-muted)",
+                    margin: 0,
+                  }}
+                >
+                  {floor.range}
+                </p>
+                <h3 style={{ fontFamily: "var(--font-display, Georgia, serif)", fontSize: "1.25rem", margin: "0.2rem 0" }}>
+                  {floor.name}
+                </h3>
+                <p style={{ margin: 0, color: "var(--color-ink-muted)", fontSize: "0.9rem" }}>{floor.text}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+
         {/* Comparison table */}
         <section
           style={{
@@ -314,6 +379,9 @@ export default function HomePage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div style={{ maxWidth: 420, marginTop: "2rem" }}>
+              <RenderTelemetry pattern="SSG" generatedAt={buildTime} />
             </div>
           </div>
         </section>

@@ -1,71 +1,69 @@
 import "server-only";
+import { cache } from "react";
 import type { Species } from "@/domain/models";
 import { unwrapOr } from "@/domain/result";
-import { findCuratedSpecies, catalogNumberOf, CURATED_SPECIES } from "@/config/species";
 import {
-  createTaxonomyProvider,
-  createProfileProvider,
-} from "@/adapters/provider.factory";
+  CURATED_SPECIES,
+  catalogNumberOf,
+  findCuratedSpecies,
+  type CuratedSpecies,
+} from "@/config/species";
+import { createProfileProvider, createTaxonomyProvider } from "@/adapters/provider.factory";
 
 const taxonomy = createTaxonomyProvider();
 const profile = createProfileProvider();
 
+const LOCALE = "es";
+
+/** Curated data only, with no network calls: used where speed matters (shells, metadata, lists). */
+function toBaseSpecies(curated: CuratedSpecies): Species {
+  return {
+    slug: curated.slug,
+    catalogNumber: catalogNumberOf(curated.slug),
+    scientificName: curated.scientificName,
+    commonName: curated.commonName.es,
+    emblem: curated.emblem,
+    thermalFloor: curated.thermalFloor,
+    taxonomy: null,
+    profile: null,
+  };
+}
+
+export function getCuratedSpecies(slug: string): Species | null {
+  const curated = findCuratedSpecies(slug);
+  return curated ? toBaseSpecies(curated) : null;
+}
+
 /**
- * Fetch a species by slug: merge curated data + GBIF taxonomy + iNaturalist profile.
- * Returns null for unknown slugs.
+ * Curated data enriched with GBIF taxonomy and the iNaturalist profile.
+ * Each source degrades independently: if an API fails, the page still
+ * renders with the curated data (so the build never breaks).
  */
-export async function getSpeciesBySlug(slug: string): Promise<Species | null> {
+// React `cache` dedupes calls within one render (generateMetadata + page).
+export const getSpeciesBySlug = cache(async (slug: string): Promise<Species | null> => {
   const curated = findCuratedSpecies(slug);
   if (!curated) return null;
 
-  const catalogNumber = catalogNumberOf(slug);
-
-  const [taxonomyResult, profileResult] = await Promise.allSettled([
+  const [taxonomyResult, profileResult] = await Promise.all([
     taxonomy.matchSpecies(curated.scientificName),
-    profile.getTaxonProfile(curated.scientificName, "es"),
+    profile.getTaxonProfile(curated.scientificName, LOCALE),
   ]);
-
-  const taxonomyMatch =
-    taxonomyResult.status === "fulfilled" && taxonomyResult.value.ok
-      ? taxonomyResult.value.value
-      : null;
-
-  const taxonProfile =
-    profileResult.status === "fulfilled" && profileResult.value.ok
-      ? profileResult.value.value
-      : null;
+  const taxonProfile = unwrapOr(profileResult, null);
 
   return {
-    slug: curated.slug,
-    catalogNumber,
-    scientificName: curated.scientificName,
-    commonName:
-      taxonProfile?.commonName ?? curated.commonName.es,
-    emblem: curated.emblem,
-    thermalFloor: curated.thermalFloor,
-    taxonomy: taxonomyMatch,
+    ...toBaseSpecies(curated),
+    commonName: taxonProfile?.commonName ?? curated.commonName.es,
+    taxonomy: unwrapOr(taxonomyResult, null),
     profile: taxonProfile,
   };
-}
+});
 
 /** All slugs for generateStaticParams. */
 export function getAllSpeciesSlugs(): { slug: string }[] {
   return CURATED_SPECIES.map(({ slug }) => ({ slug }));
 }
 
-/** Lightweight list for the Herbarium grid: no profile fetches needed. */
-export async function getAllSpeciesForList(): Promise<
-  { slug: string; scientificName: string; commonName: string; emblem: string; thermalFloor: string; catalogNumber: number }[]
-> {
-  return CURATED_SPECIES.map((s, i) => ({
-    slug: s.slug,
-    scientificName: s.scientificName,
-    commonName: s.commonName.es,
-    emblem: s.emblem,
-    thermalFloor: s.thermalFloor,
-    catalogNumber: i + 1,
-  }));
+/** Lightweight list for the Herbarium grid: no network calls. */
+export function getAllSpeciesForList(): Species[] {
+  return CURATED_SPECIES.map(toBaseSpecies);
 }
-
-// Suppress unused-import warning for unwrapOr (used indirectly)
-void unwrapOr;

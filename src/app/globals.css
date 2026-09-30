@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 /* ── Design tokens ─────────────────────────────────────────────────────── */
-@theme inline {
-  /* Colour palette */
+/* Raw values live on :root so dark mode can redefine them in one place.   */
+:root {
+  /* Colour palette (every text/background pair checked for WCAG AA) */
   --color-paper:       #F1EAD8;
   --color-paper-deep:  #E6DCC3;
   --color-paper-light: #FAF6EE;
@@ -10,7 +11,7 @@
   --color-ink-muted:   #3D4F45;
   --color-moss:        #3E5C3A;
   --color-moss-light:  #5A7D55;
-  --color-cinnabar:    #C2452D;
+  --color-cinnabar:    #A93A24;
   --color-ochre:       #D9A441;
   --color-ochre-light: #F0C060;
   --color-slate:       #2E3A3F;
@@ -25,10 +26,10 @@
   --color-danger:      var(--color-cinnabar);
   --color-highlight:   var(--color-ochre);
 
-  /* Typography */
-  --font-display: var(--font-fraunces);
-  --font-sans:    var(--font-instrument);
-  --font-mono:    var(--font-ibmplex);
+  /* Chrome (header, footer, heroes): identical in light and dark mode */
+  --color-chrome:        #1B2A22;
+  --color-chrome-text:   #F1EAD8;
+  --color-chrome-accent: #D9A441;
 
   /* Radii */
   --radius-sm:  4px;
@@ -36,16 +37,33 @@
   --radius-lg:  16px;
   --radius-xl:  24px;
   --radius-full: 9999px;
+
+  color-scheme: light;
 }
 
 /* ── Dark mode — "cuaderno de noche" ──────────────────────────────────── */
+/* Paper turns into volcanic slate and the ink becomes light.              */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background:  var(--color-slate-deep);
-    --color-foreground:  var(--color-paper);
-    --color-surface:     var(--color-slate);
-    --color-accent:      var(--color-moss-light);
+    --color-paper:       #1C262A;
+    --color-paper-deep:  #2E3A3F;
+    --color-paper-light: #243034;
+    --color-ink:         #F1EAD8;
+    --color-ink-muted:   #C9C0AA;
+    --color-moss:        #9DBF8E;
+    --color-moss-light:  #B7D4A8;
+    --color-cinnabar:    #F08A6E;
+    --color-ochre:       #E8B95A;
+    --color-sky:         #8FBBC7;
+    color-scheme: dark;
   }
+}
+
+/* Font families come from next/font variables set on <html>. */
+@theme inline {
+  --font-display: var(--font-fraunces);
+  --font-sans:    var(--font-instrument);
+  --font-mono:    var(--font-ibmplex);
 }
 
 /* ── Base reset & typography ──────────────────────────────────────────── */
@@ -116,8 +134,8 @@ body > * { position: relative; z-index: 1; }
 
 /* ── Animations ───────────────────────────────────────────────────────── */
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(6px) blur(4px); }
-  to   { opacity: 1; transform: translateY(0)   blur(0);   }
+  from { opacity: 0; transform: translateY(6px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);   filter: blur(0);   }
 }
 
 @keyframes pulse-gentle {
@@ -133,10 +151,28 @@ body > * { position: relative; z-index: 1; }
   animation: pulse-gentle 1.8s ease-in-out infinite;
 }
 
+/* Cross-route transitions where the browser supports the View Transitions API. */
+@view-transition {
+  navigation: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration:   0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration:  0.01ms !important;
   }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ── Leaflet ──────────────────────────────────────────────────────────── */
+.leaflet-container {
+  font-family: var(--font-sans, sans-serif);
+  background: var(--color-paper-deep);
+  border-radius: var(--radius-lg);
 }

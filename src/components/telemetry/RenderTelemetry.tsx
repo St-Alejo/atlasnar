@@ -1,73 +1,46 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { Stamp } from "@/components/ui/Stamp";
-import { formatDateTime, formatRelativeTime } from "@/lib/formatters";
+import { t } from "@/i18n";
+import { formatDateTime } from "@/lib/formatters";
+import { PageAge } from "./PageAge";
+import type { RenderPattern } from "./patterns";
 
-export type RenderPattern = "SSG" | "ISR" | "SSR" | "STREAMING" | "CSR";
-
-const WHY: Record<RenderPattern, string> = {
-  SSG:
-    "El contenido taxonómico cambia raramente. Generarlo en build lo sirve desde CDN sin coste de servidor.",
-  ISR:
-    "Las observaciones cambian a diario. ISR sirve la versión reciente sin bloquear al usuario.",
-  SSR:
-    "La búsqueda depende de coordenadas únicas por petición. Debe resolverse en cada consulta.",
-  STREAMING:
-    "Tres fuentes con latencias distintas. Suspense muestra cada bloque cuando llega, sin esperar al más lento.",
-  CSR:
-    "Los filtros y el mapa son completamente interactivos. El estado vive en el navegador.",
-};
-
-const TRADEOFF: Record<RenderPattern, string> = {
-  SSG:
-    "Inviable para datos dinámicos. El contenido es tan reciente como el último build.",
-  ISR:
-    "La primera visita tras caducar sirve la versión vieja mientras regenera en segundo plano.",
-  SSR:
-    "El servidor retiene la respuesta hasta tener todos los datos. El TTFB puede ser alto.",
-  STREAMING:
-    "Hay que diseñar esqueletos cuidadosos para evitar saltos de layout (CLS).",
-  CSR:
-    "El HTML llega casi vacío. JavaScript desactivado deja la página sin contenido.",
-};
+export type { RenderPattern } from "./patterns";
 
 interface RenderTelemetryProps {
   readonly pattern: RenderPattern;
   /** ISO timestamp taken on the server at render time. */
   readonly generatedAt: string;
   readonly revalidateSeconds?: number;
+  /** Overrides the "generated" label, e.g. for CSR where data is fetched later. */
+  readonly generatedLabel?: string;
 }
 
-/** Small island component: shows "hace N minutos" by comparing generatedAt to now(). */
-function PageAge({ generatedAt }: { generatedAt: string }) {
-  const [age, setAge] = useState<string>("");
-  useEffect(() => {
-    const update = () => setAge(formatRelativeTime(generatedAt));
-    update();
-    const id = setInterval(update, 30_000);
-    return () => clearInterval(id);
-  }, [generatedAt]);
-  return age ? (
-    <span style={{ color: "var(--color-ink-muted)", fontSize: "0.75rem" }}>
-      {" "}
-      ({age})
-    </span>
-  ) : null;
-}
+const termStyle: CSSProperties = {
+  fontFamily: "var(--font-mono, monospace)",
+  fontSize: "0.6rem",
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: "var(--color-ink-muted)",
+  marginBottom: "0.1rem",
+};
 
 /**
- * Sidebar panel shown on every page. Displays rendering pattern, timestamp,
- * "why here" rationale and the trade-off — making each page self-explanatory.
+ * Server Component shown on every page: rendering pattern, server timestamp,
+ * "why here" rationale and trade-off, so each page explains itself.
  */
 export function RenderTelemetry({
   pattern,
   generatedAt,
   revalidateSeconds,
+  generatedLabel,
 }: RenderTelemetryProps) {
+  const dict = t();
   return (
     <aside
       aria-label="Información de rendering"
+      data-testid="render-telemetry"
+      data-pattern={pattern}
       style={{
         background: "var(--color-paper-deep)",
         border: "1px solid color-mix(in srgb, var(--color-ink) 15%, transparent)",
@@ -80,22 +53,10 @@ export function RenderTelemetry({
         lineHeight: 1.5,
       }}
     >
-      {/* Stamp + pattern name */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
         <Stamp label={pattern} size="lg" />
         <div>
-          <p
-            style={{
-              fontFamily: "var(--font-mono, monospace)",
-              fontSize: "0.65rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-ink-muted)",
-              margin: 0,
-            }}
-          >
-            Patrón de rendering
-          </p>
+          <p style={{ ...termStyle, margin: 0 }}>Patrón de rendering</p>
           <p
             style={{
               fontFamily: "var(--font-display, Georgia, serif)",
@@ -104,82 +65,39 @@ export function RenderTelemetry({
               margin: 0,
             }}
           >
-            {pattern}
+            {dict.pattern[pattern]}
           </p>
         </div>
       </div>
 
-      {/* Metadata */}
       <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
         <div>
-          <dt
-            style={{
-              fontFamily: "var(--font-mono, monospace)",
-              fontSize: "0.6rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-ink-muted)",
-              marginBottom: "0.1rem",
-            }}
-          >
-            Generado
-          </dt>
+          <dt style={termStyle}>{generatedLabel ?? dict.telemetry.generatedAt}</dt>
           <dd style={{ margin: 0, fontFamily: "var(--font-mono, monospace)" }}>
-            <time dateTime={generatedAt}>{formatDateTime(generatedAt)}</time>
+            <time dateTime={generatedAt} data-testid="generated-at">
+              {formatDateTime(generatedAt)}
+            </time>
             <PageAge generatedAt={generatedAt} />
           </dd>
         </div>
 
         {revalidateSeconds !== undefined && (
           <div>
-            <dt
-              style={{
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.6rem",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-muted)",
-                marginBottom: "0.1rem",
-              }}
-            >
-              Revalida cada
-            </dt>
+            <dt style={termStyle}>{dict.telemetry.revalidatesEvery}</dt>
             <dd style={{ margin: 0, fontFamily: "var(--font-mono, monospace)" }}>
-              {revalidateSeconds} s
+              {revalidateSeconds} {dict.telemetry.seconds}
             </dd>
           </div>
         )}
 
         <div>
-          <dt
-            style={{
-              fontFamily: "var(--font-mono, monospace)",
-              fontSize: "0.6rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-ink-muted)",
-              marginBottom: "0.1rem",
-            }}
-          >
-            ¿Por qué este patrón?
-          </dt>
-          <dd style={{ margin: 0, color: "var(--color-ink)" }}>{WHY[pattern]}</dd>
+          <dt style={termStyle}>{dict.telemetry.whyThisPattern}</dt>
+          <dd style={{ margin: 0 }}>{dict.patternWhy[pattern]}</dd>
         </div>
 
         <div>
-          <dt
-            style={{
-              fontFamily: "var(--font-mono, monospace)",
-              fontSize: "0.6rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-cinnabar)",
-              marginBottom: "0.1rem",
-            }}
-          >
-            Trade-off
-          </dt>
-          <dd style={{ margin: 0, color: "var(--color-ink)" }}>{TRADEOFF[pattern]}</dd>
+          <dt style={{ ...termStyle, color: "var(--color-cinnabar)" }}>{dict.telemetry.tradeoff}</dt>
+          <dd style={{ margin: 0 }}>{dict.patternTradeoff[pattern]}</dd>
         </div>
       </dl>
     </aside>

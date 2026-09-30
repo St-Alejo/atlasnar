@@ -2,7 +2,7 @@ import { SpecimenCard } from "@/features/herbarium/SpecimenCard";
 import { RenderTelemetry } from "@/components/telemetry/RenderTelemetry";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { ContourBackground } from "@/components/ui/ContourBackground";
+import { StationHero } from "@/components/layout/StationHero";
 import { getAllSpeciesForList } from "@/services/species.service";
 
 export const dynamic = "force-static";
@@ -13,54 +13,20 @@ export const metadata = {
     "Fichas estáticas de las especies emblemáticas de Nariño, Colombia. Generadas en build con SSG.",
 };
 
-export default async function HerbariumPage() {
-  const species = await getAllSpeciesForList();
+export default function HerbariumPage() {
+  const species = getAllSpeciesForList();
   const generatedAt = new Date().toISOString();
 
   return (
     <>
       <Header />
       <main id="main-content">
-        {/* Page header */}
-        <div
-          style={{
-            position: "relative",
-            background: "var(--color-moss)",
-            color: "var(--color-paper)",
-            padding: "3rem 1.5rem 2.5rem",
-            overflow: "hidden",
-          }}
-        >
-          <ContourBackground />
-          <div style={{ position: "relative", zIndex: 1, maxWidth: "1200px", margin: "0 auto" }}>
-            <p
-              style={{
-                fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.65rem",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "var(--color-ochre)",
-                marginBottom: "0.5rem",
-              }}
-            >
-              🌿 Estación · SSG
-            </p>
-            <h1
-              style={{
-                fontFamily: "var(--font-display, Georgia, serif)",
-                fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
-                fontWeight: 800,
-                margin: "0 0 0.75rem",
-              }}
-            >
-              Herbarium
-            </h1>
-            <p style={{ opacity: 0.85, maxWidth: "55ch", lineHeight: 1.6 }}>
-              Especímenes prensados: fichas generadas en build y conservadas para siempre.
-              Cada tarjeta es una lámina de herbario real.
-            </p>
-          </div>
-        </div>
+        <StationHero tone="moss" eyebrow="🌿 Estación · SSG" title="Herbarium">
+          <p style={{ opacity: 0.9, maxWidth: "55ch", lineHeight: 1.6 }}>
+            Especímenes prensados: fichas generadas en build y conservadas para siempre.
+            Cada tarjeta es una lámina de herbario real.
+          </p>
+        </StationHero>
 
         {/* Content */}
         <div
@@ -102,8 +68,8 @@ export default async function HerbariumPage() {
                   slug={s.slug}
                   scientificName={s.scientificName}
                   commonName={s.commonName}
-                  emblem={s.emblem as "mammal" | "bird" | "plant"}
-                  thermalFloor={s.thermalFloor as "coast" | "cloud-forest" | "paramo"}
+                  emblem={s.emblem}
+                  thermalFloor={s.thermalFloor}
                   catalogNumber={s.catalogNumber}
                 />
               ))}
