@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────────────────── */
+@theme inline {
+  /* Colour palette */
+  --color-paper:       #F1EAD8;
+  --color-paper-deep:  #E6DCC3;
+  --color-paper-light: #FAF6EE;
+  --color-ink:         #1B2A22;
+  --color-ink-muted:   #3D4F45;
+  --color-moss:        #3E5C3A;
+  --color-moss-light:  #5A7D55;
+  --color-cinnabar:    #C2452D;
+  --color-ochre:       #D9A441;
+  --color-ochre-light: #F0C060;
+  --color-slate:       #2E3A3F;
+  --color-slate-deep:  #1C262A;
+  --color-sky:         #6B9BA8;
+
+  /* Semantic aliases */
+  --color-background:  var(--color-paper);
+  --color-foreground:  var(--color-ink);
+  --color-surface:     var(--color-paper-deep);
+  --color-accent:      var(--color-moss);
+  --color-danger:      var(--color-cinnabar);
+  --color-highlight:   var(--color-ochre);
+
+  /* Typography */
+  --font-display: var(--font-fraunces);
+  --font-sans:    var(--font-instrument);
+  --font-mono:    var(--font-ibmplex);
+
+  /* Radii */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-full: 9999px;
+}
+
+/* ── Dark mode — "cuaderno de noche" ──────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background:  var(--color-slate-deep);
+    --color-foreground:  var(--color-paper);
+    --color-surface:     var(--color-slate);
+    --color-accent:      var(--color-moss-light);
+  }
+}
+
+/* ── Base reset & typography ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color:            var(--color-foreground);
+  font-family:      var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size:        1rem;
+  line-height:      1.65;
+  min-height:       100dvh;
+  display:          flex;
+  flex-direction:   column;
+}
+
+/* ── Skip link ────────────────────────────────────────────────────────── */
+.skip-link {
+  position:  absolute;
+  top:       -100%;
+  left:      1rem;
+  padding:   0.5rem 1rem;
+  background: var(--color-moss);
+  color:     var(--color-paper);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index:   9999;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ── Headings ─────────────────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display, Georgia, serif);
+  line-height: 1.15;
+  text-wrap:   balance;
+}
+
+/* ── Focus visible ────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-moss);
+  outline-offset: 3px;
+}
+
+/* ── Texture overlay (SVG grain, no external image) ──────────────────── */
+body::before {
+  content:  "";
+  position: fixed;
+  inset:    0;
+  z-index:  0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Ensure content sits above pseudo-element */
+body > * { position: relative; z-index: 1; }
+
+/* ── Utility classes ──────────────────────────────────────────────────── */
+.font-display  { font-family: var(--font-display, Georgia, serif); }
+.font-mono     { font-family: var(--font-mono, monospace); }
+.text-muted    { color: var(--color-ink-muted); }
+
+/* ── Animations ───────────────────────────────────────────────────────── */
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(6px) blur(4px); }
+  to   { opacity: 1; transform: translateY(0)   blur(0);   }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.animate-reveal {
+  animation: reveal 0.5s ease-out both;
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:   0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:  0.01ms !important;
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "herbarium": "Herbario",
+    "logbook": "Diario",
+    "radar": "Radar",
+    "dossier": "Expediente",
+    "lab": "Laboratorio"
+  },
+  "station": {
+    "herbarium": "Herbarium",
+    "logbook": "Logbook",
+    "radar": "Field Radar",
+    "dossier": "Specimen Dossier",
+    "lab": "Field Lab"
+  },
+  "pattern": {
+    "SSG":       "SSG",
+    "ISR":       "ISR",
+    "SSR":       "SSR",
+    "STREAMING": "Streaming SSR",
+    "CSR":       "CSR"
+  },
+  "patternWhy": {
+    "SSG":       "El contenido taxonómico cambia raramente. Generarlo en build lo sirve desde CDN sin coste de servidor.",
+    "ISR":       "Las observaciones cambian a diario. ISR sirve la versión reciente sin bloquear al usuario.",
+    "SSR":       "La búsqueda depende de coordenadas únicas por petición. Debe resolverse en cada consulta.",
+    "STREAMING": "Tres fuentes con latencias distintas. Suspense muestra cada bloque cuando llega, sin esperar al más lento.",
+    "CSR":       "Los filtros y el mapa son completamente interactivos. El estado vive en el navegador."
+  },
+  "patternTradeoff": {
+    "SSG":       "Inviable para datos dinámicos. El contenido es tan reciente como el último build.",
+    "ISR":       "La primera visita tras caducar sirve la versión vieja mientras regenera en segundo plano.",
+    "SSR":       "El servidor retiene la respuesta hasta tener todos los datos. El TTFB puede ser alto.",
+    "STREAMING": "Hay que diseñar esqueletos cuidadosos para evitar saltos de layout (CLS).",
+    "CSR":       "El HTML llega casi vacío. JavaScript desactivado deja la página sin contenido."
+  },
+  "telemetry": {
+    "generatedAt":     "Generado",
+    "revalidatesEvery": "Revalida cada",
+    "seconds":         "s",
+    "whyThisPattern":  "¿Por qué este patrón?",
+    "tradeoff":        "Trade-off"
+  },
+  "herbarium": {
+    "title":       "Herbarium · Especies de Nariño",
+    "description": "Fichas estáticas de especies emblemáticas. Generadas en build con SSG.",
+    "catalogLabel": "Catálogo de especies",
+    "viewSpecimen": "Ver ficha completa",
+    "floor": {
+      "coast":        "Costa Pacífica",
+      "cloud-forest": "Bosque de niebla",
+      "paramo":       "Páramo"
+    },
+    "emblem": {
+      "mammal": "Mamífero",
+      "bird":   "Ave",
+      "plant":  "Planta"
+    }
+  },
+  "logbook": {
+    "title":          "Logbook · Observaciones recientes",
+    "description":    "Avistamientos ciudadanos actualizados automáticamente con ISR.",
+    "recentIn":       "Observaciones recientes en",
+    "noObservations": "No se encontraron observaciones recientes en esta zona.",
+    "observer":       "Observador",
+    "place":          "Lugar",
+    "viewOnInat":     "Ver en iNaturalist"
+  },
+  "radar": {
+    "title":       "Field Radar · Búsqueda por ubicación",
+    "description": "Observaciones cerca de ti, generadas en el servidor en cada petición (SSR).",
+    "locateMe":    "Usar mi ubicación",
+    "latitude":    "Latitud",
+    "longitude":   "Longitud",
+    "radius":      "Radio (km)",
+    "search":      "Buscar",
+    "noResults":   "No se encontraron observaciones en ese radio.",
+    "locating":    "Obteniendo ubicación…",
+    "locateError": "No se pudo obtener tu ubicación. Ingresa las coordenadas manualmente."
+  },
+  "dossier": {
+    "title":        "Specimen Dossier",
+    "description":  "Expediente completo con streaming SSR. Cada panel carga independientemente.",
+    "photos":       "Fotografías",
+    "map":          "Distribución en Nariño",
+    "sightings":    "Avistamientos recientes",
+    "streamOn":     "Streaming ON",
+    "streamOff":    "Streaming OFF",
+    "noPhotos":     "No hay fotografías disponibles.",
+    "noPoints":     "No se encontraron registros georreferenciados.",
+    "noSightings":  "No se encontraron avistamientos recientes."
+  },
+  "lab": {
+    "title":       "Field Lab · Explorador interactivo",
+    "description": "Filtros y mapa en tiempo real. Todo ocurre en el navegador (CSR).",
+    "filters":     "Filtros",
+    "group":       "Grupo taxonómico",
+    "allGroups":   "Todos",
+    "dateFrom":    "Desde",
+    "taxonName":   "Especie (nombre científico)",
+    "apply":       "Aplicar",
+    "loading":     "Cargando observaciones…",
+    "noResults":   "No se encontraron observaciones con esos filtros.",
+    "mapAlt":      "Mapa de observaciones en Nariño"
+  },
+  "common": {
+    "loading":          "Cargando…",
+    "error":            "Ocurrió un error",
+    "notFound":         "No encontrado",
+    "backToHerbarium":  "Volver al Herbario",
+    "backToHome":       "Volver al inicio",
+    "learnMore":        "Más información",
+    "observations":     "observaciones",
+    "conservationStatus": "Estado de conservación",
+    "wikipedia":        "Wikipedia",
+    "source":           "Fuente",
+    "gbif":             "GBIF",
+    "inaturalist":      "iNaturalist",
+    "photoCredit":      "Foto",
+    "license":          "Licencia"
+  }
+}
